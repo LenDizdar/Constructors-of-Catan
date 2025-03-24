@@ -1,11 +1,15 @@
-export module observer;
+#ifndef OBSERVER_H
+#define OBSERVER_H
+#include "ResourceList.h"
 
-import resourcelist;
+class Subject;
 
-export class Observer {
+class Observer {
     public:
         // The parameter lets us pass the necessary information
         // while avoiding the circular dependency from passing a Subject
-        virtual void notify(ResourceList *resList) = 0;
+        virtual void notify(Subject& whoNotified) = 0;
         virtual ~Observer() = default;
 };
+
+#endif

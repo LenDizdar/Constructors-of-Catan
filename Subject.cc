@@ -1,14 +1,16 @@
-export module subject;
+#include "Subject.h"
+//import observer;
 
-import <vector>;
+Subject::Subject(int brick, int energy, int glass, int heat, int wifi) :
+    observers{},
+    resList{std::make_unique<ResourceList>(brick, energy, glass, heat, wifi)} {}
 
-import resourcelist;
-import observer;
+void Subject::notifyObservers() {
+    for (auto& obs : observers) {
+        obs->notify(*this);
+    }
+}
 
-export class Subject {
-    std::vector<Observer*> observers;
-    ResourceList *resList;
-    public:
-        void notifyObservers();
-        void attach(Observer *obs);
-};
+void Subject::attach(Observer *obs) {
+    observers.emplace_back(obs);
+}

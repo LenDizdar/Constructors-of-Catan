@@ -11,9 +11,18 @@ class Subject {
     protected:
         std::unique_ptr<ResourceList> resList;
     public:
-        Subject(int brick, int energy, int glass, int heat, int wifi);
-        void notifyObservers();
-        void attach(Observer *obs);
-        ResourceList* getResList() { return &(*resList); }
+        Subject(int brick, int energy, int glass, int heat, int wifi); //Constructor
+                                            // initializes the resource list with
+                                            // the corresponding ints
+
+        Subject(Resource r); // Constructor
+                             // initializes resource list with a single resource
+                             // of the specified type
+
+        void notifyObservers(); // Notify all attached observers
+
+        void attach(Observer *obs); // Attach a new observer
+
+        ResourceList* getResList() { return &(*resList); } // Getter
 };
 #endif

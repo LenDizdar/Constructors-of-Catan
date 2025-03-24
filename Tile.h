@@ -8,10 +8,21 @@ class Tile : public Subject {
     int rollNum;
     bool isBlocked;
     public:
-        Tile(int brick, int energy, int glass, int heat, int wifi, int rollNum);
-        void roll(int dieRoll);
-        std::string getResourceName() const;
-        int getRollNum() const { return rollNum; }
-        bool getIsBlocked() const { return isBlocked; }
+        Tile(int brick, int energy, int glass, int heat, int wifi, int rollNum); // Constructor
+                                                                      
+        Tile(Resource r, int rollNum); // Constructor for a tile with a single resource
+                                       // (tile as they are in the base Catan game)
+
+        void roll(int dieRoll); // Will update the Verticies observing the Tile if the rolled
+                                // number is the number on the tile
+
+        std::string getResourceName() const; // Returns the name of the resource, but as
+                                             // a string. Will return "PARK" if Tile
+                                             // has no resources
+
+        int getRollNum() const { return rollNum; } // Getter
+
+        bool getIsBlocked() const { return isBlocked; } // Getter
 };
+
 #endif

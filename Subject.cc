@@ -4,6 +4,13 @@
 Subject::Subject(int brick, int energy, int glass, int heat, int wifi) :
     observers{},
     resList{std::make_unique<ResourceList>(brick, energy, glass, heat, wifi)} {}
+    
+
+Subject::Subject(Resource r) : observers{}, resList{std::make_unique<ResourceList>()} {
+        
+    resList->set(r, 1);
+
+}
 
 void Subject::notifyObservers() {
     for (auto& obs : observers) {

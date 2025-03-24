@@ -1,5 +1,6 @@
 #include "Tile.h"
-// Whoever  creates a Tile must attach its observers
+// Whoever  creates a Tile must attach its observers (will be Board)
+// Goes for both contructors
 Tile::Tile(int brick, int energy, int glass, int heat, int wifi, int rollNum) : 
     Subject{brick, energy, glass, heat, wifi}, rollNum{rollNum} {
         // only a park will be initialized without resources
@@ -9,6 +10,10 @@ Tile::Tile(int brick, int energy, int glass, int heat, int wifi, int rollNum) :
             isBlocked = false;
         }
 }
+
+
+Tile::Tile(Resource r, int rollNum) : Subject{r}, rollNum{rollNum}, isBlocked{false} {};
+
 
 void Tile::roll(int dieRoll) {
     if (dieRoll == rollNum) {

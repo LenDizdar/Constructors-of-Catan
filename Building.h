@@ -3,11 +3,13 @@
 
 #include "Constructable.h"
 #include "Subject.h"
+#include "Vertex.h"
 #include <string>
 
 class Building : public Constructable, public Subject {
     // When notified by vertex this is called to update what is sent to the Builder
     void setLastResource(ResourceList *oResList) { resList->set(*oResList); }
+    friend void Vertex::notify(Subject& whoNotified);
     protected:
         int pointValue;
         int numResources;

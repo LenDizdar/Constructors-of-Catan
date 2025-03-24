@@ -50,6 +50,14 @@ void ResourceList::set(Resource res, int amt) {
     }
 }
 
+void ResourceList::set(ResourceList& resList) {
+    brick = resList.get(Resource::BRICK);
+    energy = resList.get(Resource::ENERGY);
+    glass = resList.get(Resource::GLASS);
+    heat = resList.get(Resource::HEAT);
+    wifi = resList.get(Resource::WIFI);
+}
+
 void ResourceList::change(Resource res, int amt) {
     switch (res) {
         case Resource::BRICK:

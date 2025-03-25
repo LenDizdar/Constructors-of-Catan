@@ -20,6 +20,7 @@ class ResourceList {
         ResourceList(int brick, int energy, int glass, int heat, int wifi);
         int get(Resource res);
         void set(Resource res, int amt);
+        void set(ResourceList &resList);
         void change(Resource res, int amt);
 };
 #endif

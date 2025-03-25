@@ -2,6 +2,7 @@
 #define VERTEX_H
 #include <iostream>
 #include <vector>
+#include <string>
 #include "ResourceList.h"
 #include "Observer.h"
 
@@ -15,11 +16,13 @@ class Edge;
 class Vertex : public Observer {
     Building* residence;
     Edge* edges[3];
+    int index;
     public:
-        Vertex() : residence{nullptr}, edges{nullptr, nullptr, nullptr} {}
+        Vertex(int i) : residence{nullptr}, edges{nullptr, nullptr, nullptr}, index{i} {}
         const Building* getBuilding() { return const_cast<const Building*>(residence); }
         void notify(Subject& whoNotified);
         bool canBuildOn(Builder& builder);
+        std::string getName() const;
 };
 
 // istream& operator<<(istream& in, Vertex& vert);

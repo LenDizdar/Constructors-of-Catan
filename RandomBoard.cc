@@ -12,16 +12,16 @@ RandomBoard::RandomBoard() : Board{} {
     }
 
     //Creating verticies
-    for (int i = 0; i < 53; ++i) {
+    for (int i = 0; i < 54; ++i) {
 
-        vertices.emplace_back(Vertex());
+        vertices.emplace_back(Vertex(i));
 
     }
 
     //Creating edges
-    for (int i = 0; i < 54; ++i) {
+    for (int i = 0; i < 72; ++i) {
 
-        edges.emplace_back(Edge());
+        edges.emplace_back(Edge(i));
 
     }
 

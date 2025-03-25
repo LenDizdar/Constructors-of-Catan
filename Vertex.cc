@@ -1,6 +1,21 @@
 #include "Vertex.h"
 #include "Edge.h"
 #include "Subject.h"
+#include "Building.h"
+using namespace std;
+
+string Vertex::getName() const {
+
+    if (residence) {
+
+        return residence->getColour();
+
+    }
+
+    string s = to_string(index);
+    return s;
+
+}
 
 void Vertex::notify(Subject& whoNotified) {
     /* UNCOMMENT WHEN BUILDING IMPLEMENTED

@@ -8,17 +8,17 @@
 #include "Edge.h"
 #include "Tile.h"
 
-using namespace std;
-
 class Board {
+
+    std::string getLine(int left, int edge, int right);
     
     protected:
-        vector<Vertex> vertices;
-        vector<Edge> edges;
-        vector<Tile> tiles;
+        std::vector<Vertex> vertices;
+        std::vector<Edge> edges;
+        std::vector<Tile> tiles;
     public:
         void rolled(int dieNum);
-        string getDesc();
+        std::string getDesc();
 };
 
 #endif

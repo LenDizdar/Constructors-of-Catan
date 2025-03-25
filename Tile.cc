@@ -23,19 +23,19 @@ void Tile::roll(int dieRoll) {
 
 std::string Tile::getResourceName() const {
     if (resList->get(Resource::BRICK)) {
-        return "BRICK";
+        return " BRICK";
     }
     if (resList->get(Resource::ENERGY)) {
         return "ENERGY";
     }
     if (resList->get(Resource::GLASS)) {
-        return "GLASS";
+        return " GLASS";
     }
     if (resList->get(Resource::HEAT)) {
-        return "HEAT";
+        return " HEAT ";
     }
     if (resList->get(Resource::WIFI)) {
-        return "WIFI";
+        return " WIFI ";
     }
-    return "PARK";
+    return " PARK ";
 }

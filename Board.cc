@@ -12,7 +12,7 @@ void Board::rolled(int dieNum) {
     }
 }
 
-string Board::getLine(int left, int edge, int right) {
+string Board::getLineTop(int left, int edge, int right) {
 
     ostringstream oss;
 
@@ -27,13 +27,48 @@ string Board::getLine(int left, int edge, int right) {
 
 }
 
+string Board::getLineMiddle(int left, int tile, int right) {
+
+    ostringstream oss;
+
+    oss << setw(2) << edges.at(left).getName() << "   ";
+    oss << setw(2) << tile << "   ";
+    oss << setw(2) << edges.at(right).getName();
+
+    return oss.str();
+
+}
+
 string Board::getDesc() {
     // Printing the board can wait, we need building implementation first.
     // (for colours)
     ostringstream oss;
 
     //Have to hard code all this :(
-    oss << "                          " << getLine(0, 0, 1);
+    oss << "                          " << getLineTop(0, 0, 1) << endl;
+    oss << "                            |         |" << endl;
+    oss << "                           " << getLineMiddle(1, 0, 2) << endl;
+    oss << "                            | " << tiles.at(0).getResourceName() << "  |" << endl;
+    oss << "                " << getLineTop(2, 3, 3) << "  ";
+    oss << setw(2) << tiles.at(0).getRollNum() << "  " << getLineTop(4, 4, 5) << endl;
+    oss << "                  |         |         |         |" << endl;
+    oss << "                 " << getLineMiddle(5, 1, 6);
+    oss << "        " << getLineMiddle(7, 2, 8) << endl;
+    oss << "                  | " << tiles.at(1).getResourceName() << "  |";
+    oss << "         | " << tiles.at(2).getResourceName() << "  |" << endl;
+    oss << "      " << getLineTop(6, 9, 7);
+    oss << "  " << setw(2) << tiles.at(1).getRollNum() << "  ";
+    oss << getLineTop(8, 10, 9);
+    oss << "  " << setw(2) << tiles.at(2).getRollNum() << "  ";
+    oss << getLineTop(10, 11, 11) << endl;
+    oss << "        |         |         |         |         |         |" << endl;
+    oss << "       " << getLineMiddle(12, 3, 13);
+    oss << "        " << getLineMiddle(14, 4, 15);
+    oss << "        " << getLineMiddle(16, 5, 17) << endl;
+    oss << "        | " << setw(2) << tiles.at(3).getResourceName();
+    oss << "  |         | " << setw(2) << tiles.at(4).getResourceName();
+    oss << "  |         | " << setw(2) << tiles.at(5).getResourceName() << "  |" << endl;
+
 
     return oss.str();
 }

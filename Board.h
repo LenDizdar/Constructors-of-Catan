@@ -10,7 +10,8 @@
 
 class Board {
 
-    std::string getLine(int left, int edge, int right);
+    std::string getLineTop(int left, int edge, int right);
+    std::string getLineMiddle(int left, int tile, int right);
     
     protected:
         std::vector<Vertex> vertices;

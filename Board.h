@@ -11,9 +11,11 @@
 using namespace std;
 
 class Board {
-    vector<Vertex> vertices;
-    vector<Edge> edges;
-    vector<Tile> tiles;
+    
+    protected:
+        vector<Vertex> vertices;
+        vector<Edge> edges;
+        vector<Tile> tiles;
     public:
         void rolled(int dieNum);
         string getDesc();

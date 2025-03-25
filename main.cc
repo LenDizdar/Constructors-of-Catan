@@ -1,9 +1,11 @@
 #include "RandomBoard.h"
 #include <iostream>
+#include <random>
 
 int main (int argc, char* argv[]) {
 
-    RandomBoard b = RandomBoard();
+    unsigned seed = 12345;
+    RandomBoard b = RandomBoard(seed);
 
     std::cout << b.getDesc() << std::endl;
 

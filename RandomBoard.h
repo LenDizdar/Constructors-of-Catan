@@ -4,8 +4,10 @@
 
 class RandomBoard : public Board {
 
+    unsigned seed; // Seed for random number generator
+    
     public:
-        RandomBoard();
+        RandomBoard(unsigned seed); // Constructor
 
 };
 

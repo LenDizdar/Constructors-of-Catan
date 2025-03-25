@@ -9,8 +9,8 @@ class Basement : public Building {
         Basement(std::string colour) : Building{1, 1, "B", colour} {}
 
         // The other part is the resourceList
-        static std::unique_ptr<ResourceList> getCost() { 
-            return std::make_unique<ResourceList>(1, 1, 1, 0, 1); 
+        static ResourceList getCost() {
+            return ResourceList{1, 1, 1, 0, 1};
         }
 };
 

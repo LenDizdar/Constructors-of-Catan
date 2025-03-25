@@ -5,10 +5,10 @@
 
 class Decorator : public Building {
     // The building on which this decorator is built
-    std::shared_ptr<Building> foundation;
+    std::unique_ptr<Building> foundation;
     public:
         Decorator(int pVal, int numRes, std::string buildingType, 
-                  std::shared_ptr<Building> foundation) : 
+                  std::unique_ptr<Building> foundation) : 
             Building{pVal, numRes, buildingType, foundation->getColour()}, 
             foundation{foundation} {}
 

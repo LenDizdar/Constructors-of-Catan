@@ -7,7 +7,7 @@ RandomBoard::RandomBoard() : Board{} {
     //Creating tiles
     for (int i = 0; i < 19; ++i) {
 
-        tiles.emplace_back(Tile(0,0,0,0,0,7));
+        tiles.emplace_back(Tile(0,0,0,1,0, i % 12 + 1));
 
     }
 

@@ -1,4 +1,5 @@
 #include "Tile.h"
+#include <sstream>
 // Whoever  creates a Tile must attach its observers (will be Board)
 // Goes for both contructors
 Tile::Tile(int brick, int energy, int glass, int heat, int wifi, int rollNum) : 
@@ -19,6 +20,22 @@ void Tile::roll(int dieRoll) {
     if (dieRoll == rollNum) {
         notifyObservers();
     }
+}
+
+std::string Tile::getRollNumStr() const {
+
+    if (getResourceName() == " PARK ") {
+
+        return "";
+
+    } else {
+
+        std::ostringstream oss;
+        oss << rollNum;
+        return oss.str();
+
+    }
+
 }
 
 std::string Tile::getResourceName() const {

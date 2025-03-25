@@ -22,6 +22,8 @@ class Tile : public Subject {
 
         int getRollNum() const { return rollNum; } // Getter
 
+        std::string getRollNumStr() const; // Getter (but a string)
+
         bool getIsBlocked() const { return isBlocked; } // Getter
 };
 

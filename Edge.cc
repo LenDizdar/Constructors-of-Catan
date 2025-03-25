@@ -1,6 +1,9 @@
 #include "Edge.h"
+#include "Road.h"
 
 using namespace std;
+
+Edge::~Edge() = default;
 
 string Edge::getName() const {
 

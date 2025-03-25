@@ -15,7 +15,7 @@ class Tower : public Decorator {
             return ResourceList{3, 2, 2, 2, 1}; 
         }
 
-        std::unique_ptr<Building> improve() { throw std::logic_error("can't improve Tower"); }
+        std::unique_ptr<Building> improve(std::unique_ptr<Building> curr) { throw std::logic_error("can't improve Tower"); }
 
         ResourceList getImproveResources() { throw std::logic_error("can't improve Tower"); }
 };

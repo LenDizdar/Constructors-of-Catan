@@ -1,9 +1,10 @@
 #ifndef EDGE_H
 #define EDGE_H
+#include <memory>
 #include <string>
 class Vertex;
 
-class Road;
+#include "Road.h"
 
 class Builder;
 
@@ -13,6 +14,7 @@ class Edge {
     int index;
     friend class Builder;
     public:
+        ~Edge();
         Edge(int i) : vertices{nullptr, nullptr}, road{nullptr}, index{i} {}
         const Road* getRoad() { return &(*road); }
         const Vertex** getVertices() { return const_cast<const Vertex**>(vertices); }

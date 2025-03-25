@@ -3,6 +3,7 @@
 #include "Edge.h"
 #include "Road.h"
 #include "Basement.h"
+#include "Vertex.h"
 
 #include <random>
 

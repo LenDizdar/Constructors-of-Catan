@@ -16,7 +16,7 @@ class House : public Decorator {
         }
 
         std::unique_ptr<Building> improve(std::unique_ptr<Building> curr) { 
-            return std::make_unique<Tower>(curr); 
+            return std::make_unique<Tower>(move(curr)); 
         }
 
         ResourceList getImproveResources() { return Tower::getCost(); }

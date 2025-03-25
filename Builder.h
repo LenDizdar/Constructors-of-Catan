@@ -7,6 +7,9 @@
 #include "Building.h"
 #include "ResourceList.h"
 
+class Edge;
+class Vertex;
+
 class Builder : public Observer {
     std::string colour;
     std::vector<Vertex*> buildingLocations;

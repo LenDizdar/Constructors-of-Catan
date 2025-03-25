@@ -3,11 +3,12 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <memory>
 #include "ResourceList.h"
 #include "Observer.h"
 
 // Change forward declaration to #include when Building is implemented
-class Building;
+#include "Building.h"
 class Builder;
 
 // Check for circular dependency issues
@@ -19,6 +20,7 @@ class Vertex : public Observer {
     Edge* edges[3];
     int index;
     public:
+        ~Vertex();
         Vertex(int i) : residence{nullptr}, edges{nullptr, nullptr, nullptr}, index{i} {}
         Building* getBuilding() const { return &(*residence); }
         void notify(Subject& whoNotified);

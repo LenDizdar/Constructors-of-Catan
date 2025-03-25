@@ -6,6 +6,8 @@
 #include "Road.h"
 using namespace std;
 
+Vertex::~Vertex() = default;
+
 string Vertex::getName() const {
 
     if (residence) {

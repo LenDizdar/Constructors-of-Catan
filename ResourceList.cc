@@ -28,6 +28,10 @@ int ResourceList::get(Resource res) {
     return -1;
 }
 
+int ResourceList::getTotal() {
+    return brick + energy + glass + heat + wifi;
+}
+
 void ResourceList::set(Resource res, int amt) {
     switch (res) {
         case Resource::BRICK:
@@ -81,3 +85,24 @@ void ResourceList::change(Resource res, int amt) {
 }
 
 // A bunch of operators to be added
+
+bool ResourceList::operator>=(ResourceList other) {
+    return brick >= other.brick && energy >= other.energy && glass >= other.glass &&
+           heat >= other.heat && wifi >= other.wifi;
+}
+
+void ResourceList::operator-=(ResourceList other) {
+    brick -= other.brick;
+    energy -= other.energy;
+    glass -= other.glass;
+    heat -= other.heat;
+    wifi -= other.wifi;
+}
+
+void ResourceList::operator+=(ResourceList other) {
+    brick += other.brick;
+    energy += other.energy;
+    glass += other.glass;
+    heat += other.heat;
+    wifi += other.wifi;
+}

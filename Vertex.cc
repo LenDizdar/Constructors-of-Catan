@@ -2,6 +2,8 @@
 #include "Edge.h"
 #include "Subject.h"
 #include "Building.h"
+#include "Builder.h"
+#include "Road.h"
 using namespace std;
 
 string Vertex::getName() const {
@@ -18,27 +20,24 @@ string Vertex::getName() const {
 }
 
 void Vertex::notify(Subject& whoNotified) {
-    /* UNCOMMENT WHEN BUILDING IMPLEMENTED
     if (residence) {
         residence->setLastResource(whoNotified.getResList());
         residence->notifyObservers();
     }
-    */
 }
 
 bool Vertex::canBuildOn(Builder& builder) {
-    /* UNCOMMENT WHEN BUIDLER AND BUILDING IMPLEMENTED
     bool isAttached = false;
 
     for (auto& edge : edges) {
         if (edge) {
             // check if the builder has a road connected to this vertex
-            if (edge.getRoad()->getColour() == builder->getColour) {
+            if (edge->getRoad()->getColour() == builder.getColour()) {
                 isAttached = true;
             }
 
             // check if there are any buildings adjacent to or on the vertex
-            for (auto& vertex : edge->getVertices()) {
+            for (auto& vertex : {edge->getVertices()[0], edge->getVertices()[1]}) {
                 if (vertex && vertex->getBuilding()) {
                     return false;
                 }
@@ -46,6 +45,4 @@ bool Vertex::canBuildOn(Builder& builder) {
         }
     }
     return isAttached;
-    */
-    return false;
 }

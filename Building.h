@@ -26,6 +26,10 @@ class Building : public Constructable, public Subject {
 
         std::string getDesc() { return buildingType; }
 
+        virtual std::unique_ptr<Building> improve(std::unique_ptr<Building> curr) = 0;
+
+        virtual ResourceList getImproveResources() = 0;
+
         virtual ~Building() = 0;
 };
 

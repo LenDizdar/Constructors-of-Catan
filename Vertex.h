@@ -14,12 +14,13 @@ class Builder;
 class Edge;
 
 class Vertex : public Observer {
-    Building* residence;
+    std::unique_ptr<Building> residence;
+    friend class Builder;
     Edge* edges[3];
     int index;
     public:
         Vertex(int i) : residence{nullptr}, edges{nullptr, nullptr, nullptr}, index{i} {}
-        const Building* getBuilding() { return const_cast<const Building*>(residence); }
+        Building* getBuilding() const { return &(*residence); }
         void notify(Subject& whoNotified);
         bool canBuildOn(Builder& builder);
         std::string getName() const;

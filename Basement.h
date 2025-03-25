@@ -2,6 +2,7 @@
 #define BASEMENT_H
 
 #include "Building.h"
+#include "House.h"
 
 class Basement : public Building {
     public:
@@ -12,6 +13,12 @@ class Basement : public Building {
         static ResourceList getCost() {
             return ResourceList{1, 1, 1, 0, 1};
         }
+
+        std::unique_ptr<Building> improve(std::unique_ptr<Building> curr) { 
+            return std::make_unique<House>(curr); 
+        }
+
+        ResourceList getImproveResources() { return House::getCost(); }
 };
 
 #endif

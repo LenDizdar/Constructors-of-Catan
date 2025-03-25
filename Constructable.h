@@ -9,7 +9,7 @@ class Constructable {
         // any Constructable must have a valid builderColour
         explicit Constructable(std::string colour) : builderColour{colour} {}
         
-        std::string getColour() { return builderColour; }
+        std::string getColour() const { return builderColour; }
 
         virtual ~Constructable() = 0;
 };

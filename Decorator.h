@@ -10,7 +10,7 @@ class Decorator : public Building {
         Decorator(int pVal, int numRes, std::string buildingType, 
                   std::unique_ptr<Building> foundation) : 
             Building{pVal, numRes, buildingType, foundation->getColour()}, 
-            foundation{foundation} {}
+            foundation{std::move(foundation)} {}
 
         // Take note! This means that decorator point values are EXTRA points
         int getPointValue() { return pointValue + foundation->getPointValue(); }

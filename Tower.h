@@ -2,17 +2,22 @@
 #define TOWER_H
 
 #include "Decorator.h"
+#include <stdexcept>
 
-class Basement : public Decorator {
+class Tower : public Decorator {
     public:
         // The passed parameters are most of what makes a Building subclass
-        Basement(std::unique_ptr<Building> foundation) : 
-            Decorator{1, 1, "T", foundation} {}
+        Tower(std::unique_ptr<Building> foundation) : 
+            Decorator{1, 1, "T", std::move(foundation)} {}
 
         // The other part is the resourceList
         static ResourceList getCost() { 
             return ResourceList{3, 2, 2, 2, 1}; 
         }
+
+        std::unique_ptr<Building> improve() { throw std::logic_error("can't improve Tower"); }
+
+        ResourceList getImproveResources() { throw std::logic_error("can't improve Tower"); }
 };
 
 #endif

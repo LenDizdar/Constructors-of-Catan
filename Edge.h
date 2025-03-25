@@ -5,13 +5,16 @@ class Vertex;
 
 class Road;
 
+class Builder;
+
 class Edge {
     Vertex* vertices[2];
-    Road* road;
+    std::unique_ptr<Road> road;
     int index;
+    friend class Builder;
     public:
         Edge(int i) : vertices{nullptr, nullptr}, road{nullptr}, index{i} {}
-        const Road* getRoad() { return const_cast<const Road*>(road); }
+        const Road* getRoad() { return &(*road); }
         const Vertex** getVertices() { return const_cast<const Vertex**>(vertices); }
         std::string getName() const;
 };

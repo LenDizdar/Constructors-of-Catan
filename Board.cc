@@ -1,5 +1,4 @@
 #include "Board.h"
-#include <iostream>
 #include <sstream>
 #include <string>
 #include <iomanip>
@@ -50,16 +49,16 @@ string Board::getDesc() {
     oss << "                           " << getLineMiddle(1, 0, 2) << endl;
     oss << "                            | " << tiles.at(0).getResourceName() << "  |" << endl;
     oss << "                " << getLineTop(2, 3, 3) << "  ";
-    oss << setw(2) << tiles.at(0).getRollNum() << "  " << getLineTop(4, 4, 5) << endl;
+    oss << setw(2) << tiles.at(0).getRollNumStr() << "  " << getLineTop(4, 4, 5) << endl;
     oss << "                  |         |         |         |" << endl;
     oss << "                 " << getLineMiddle(5, 1, 6);
     oss << "        " << getLineMiddle(7, 2, 8) << endl;
     oss << "                  | " << tiles.at(1).getResourceName() << "  |";
     oss << "         | " << tiles.at(2).getResourceName() << "  |" << endl;
     oss << "      " << getLineTop(6, 9, 7);
-    oss << "  " << setw(2) << tiles.at(1).getRollNum() << "  ";
+    oss << "  " << setw(2) << tiles.at(1).getRollNumStr() << "  ";
     oss << getLineTop(8, 10, 9);
-    oss << "  " << setw(2) << tiles.at(2).getRollNum() << "  ";
+    oss << "  " << setw(2) << tiles.at(2).getRollNumStr() << "  ";
     oss << getLineTop(10, 11, 11) << endl;
     oss << "        |         |         |         |         |         |" << endl;
     oss << "       " << getLineMiddle(12, 3, 13);
@@ -69,11 +68,11 @@ string Board::getDesc() {
     oss << "  |         | " << setw(2) << tiles.at(4).getResourceName();
     oss << "  |         | " << setw(2) << tiles.at(5).getResourceName() << "  |" << endl;
     oss << "      |" << setw(2) << vertices.at(12).getName();
-    oss << "|  " << setw(2) << tiles.at(3).getRollNum();
+    oss << "|  " << setw(2) << tiles.at(3).getRollNumStr();
     oss << "  " << getLineTop(13, 18, 14);
-    oss << "  " << setw(2) << tiles.at(4).getRollNum();
+    oss << "  " << setw(2) << tiles.at(4).getRollNumStr();
     oss << "  " <<  getLineTop(15, 19, 16);
-    oss << "  " << setw(2) << tiles.at(5).getRollNum();
+    oss << "  " << setw(2) << tiles.at(5).getRollNumStr();
     oss << "  |" << setw(2) << vertices.at(17).getName() << setw(0) << "|" << endl;
     oss << "        |         |         |         |         |         |" << endl;
     oss << "       " << setw(2) << edges.at(20).getName();
@@ -84,9 +83,9 @@ string Board::getDesc() {
     oss << "  |         | " << tiles.at(7).getResourceName();
     oss << "  |         |" << endl;
     oss << "      " << getLineTop(18, 26, 19);
-    oss << "  " << setw(2) << tiles.at(6).getRollNum() << "  ";
+    oss << "  " << setw(2) << tiles.at(6).getRollNumStr() << "  ";
     oss << getLineTop(20, 27, 21);
-    oss << "  " << setw(2) << tiles.at(7).getRollNum() << "  ";
+    oss << "  " << setw(2) << tiles.at(7).getRollNumStr() << "  ";
     oss << getLineTop(22, 28, 23) << endl;
     oss << "        |         |         |         |         |         |" << endl;
     oss << "       " << getLineMiddle(29, 8, 30);
@@ -96,11 +95,11 @@ string Board::getDesc() {
     oss << "  |         | " << setw(2) << tiles.at(9).getResourceName();
     oss << "  |         | " << setw(2) << tiles.at(10).getResourceName() << "  |" << endl;
     oss << "      |" << setw(2) << vertices.at(24).getName();
-    oss << "|  " << setw(2) << tiles.at(8).getRollNum();
+    oss << "|  " << setw(2) << tiles.at(8).getRollNumStr();
     oss << "  " << getLineTop(25, 35, 26);
-    oss << "  " << setw(2) << tiles.at(9).getRollNum();
+    oss << "  " << setw(2) << tiles.at(9).getRollNumStr();
     oss << "  " <<  getLineTop(27, 36, 28);
-    oss << "  " << setw(2) << tiles.at(10).getRollNum();
+    oss << "  " << setw(2) << tiles.at(10).getRollNumStr();
     oss << "  |" << setw(2) << vertices.at(29).getName() << setw(0) << "|" << endl;
     oss << "        |         |         |         |         |         |" << endl;
     oss << "       " << setw(2) << edges.at(37).getName();
@@ -111,9 +110,9 @@ string Board::getDesc() {
     oss << "  |         | " << tiles.at(12).getResourceName();
     oss << "  |         |" << endl;
     oss << "      " << getLineTop(30, 43, 31);
-    oss << "  " << setw(2) << tiles.at(11).getRollNum() << "  ";
+    oss << "  " << setw(2) << tiles.at(11).getRollNumStr() << "  ";
     oss << getLineTop(32, 44, 33);
-    oss << "  " << setw(2) << tiles.at(12).getRollNum() << "  ";
+    oss << "  " << setw(2) << tiles.at(12).getRollNumStr() << "  ";
     oss << getLineTop(34, 45, 35) << endl;
     oss << "        |         |         |         |         |         |" << endl;
     oss << "       " << getLineMiddle(46, 13, 47);
@@ -123,11 +122,11 @@ string Board::getDesc() {
     oss << "  |         | " << setw(2) << tiles.at(14).getResourceName();
     oss << "  |         | " << setw(2) << tiles.at(15).getResourceName() << "  |" << endl;
     oss << "      |" << setw(2) << vertices.at(36).getName();
-    oss << "|  " << setw(2) << tiles.at(13).getRollNum();
+    oss << "|  " << setw(2) << tiles.at(13).getRollNumStr();
     oss << "  " << getLineTop(37, 52, 38);
-    oss << "  " << setw(2) << tiles.at(14).getRollNum();
+    oss << "  " << setw(2) << tiles.at(14).getRollNumStr();
     oss << "  " <<  getLineTop(39, 53, 40);
-    oss << "  " << setw(2) << tiles.at(15).getRollNum();
+    oss << "  " << setw(2) << tiles.at(15).getRollNumStr();
     oss << "  |" << setw(2) << vertices.at(41).getName() << setw(0) << "|" << endl;
     oss << "        |         |         |         |         |         |" << endl;
     oss << "       " << setw(2) << edges.at(54).getName();
@@ -138,9 +137,9 @@ string Board::getDesc() {
     oss << "  |         | " << tiles.at(17).getResourceName();
     oss << "  |         |" << endl;
     oss << "      " << getLineTop(42, 60, 43);
-    oss << "  " << setw(2) << tiles.at(16).getRollNum() << "  ";
+    oss << "  " << setw(2) << tiles.at(16).getRollNumStr() << "  ";
     oss << getLineTop(44, 61, 45);
-    oss << "  " << setw(2) << tiles.at(17).getRollNum() << "  ";
+    oss << "  " << setw(2) << tiles.at(17).getRollNumStr() << "  ";
     oss << getLineTop(46, 62, 47) << endl;
     oss << "                  |         |         |         |" << endl;
     oss << "                 " << setw(2) << edges.at(63).getName();
@@ -149,7 +148,7 @@ string Board::getDesc() {
     oss << "                  |         | " << tiles.at(18).getResourceName();
     oss << "  |         |" << endl;
     oss << "                " << getLineTop(48, 67, 49);
-    oss << "  " << setw(2) << tiles.at(18).getRollNum() << "  ";
+    oss << "  " << setw(2) << tiles.at(18).getRollNumStr() << "  ";
     oss << getLineTop(50, 68, 51) << endl;
     oss << "                            |         |" << endl;
     oss << "                           " << edges.at(69).getName();

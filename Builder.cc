@@ -104,13 +104,18 @@ bool Builder::buildRoad(Edge *e) {
     return false;
 }
 
-bool Builder::buildRes(Vertex* v) {
-    if (v->canBuildOn(*this) && hand >= Basement::getCost()) {
-        hand -= Basement::getCost();
+bool Builder::buildRes(Vertex* v, bool gameStart) {
+    if (gameStart) {
         v->residence = make_unique<Basement>(colour);
         return true;
     } else {
-        return false;
+        if (v->canBuildOn(*this) && hand >= Basement::getCost()) {
+            hand -= Basement::getCost();
+            v->residence = make_unique<Basement>(colour);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
@@ -167,4 +172,8 @@ string Builder::halfResources() {
         }
     }
     return lost;
+}
+
+void Builder::addResources(ResourceList toAdd) {
+    hand += toAdd;
 }

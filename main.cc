@@ -1,6 +1,7 @@
 #include "RandomBoard.h"
 #include <iostream>
 #include <random>
+#include "Builder.h"
 
 int main (int argc, char* argv[]) {
 

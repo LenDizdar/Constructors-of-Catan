@@ -39,9 +39,11 @@ class Builder : public Observer {
 
         bool buildRoad(Edge *e); // similar to above
 
-        bool buildRes(Vertex* v); // similar to above
+        bool buildRes(Vertex* v, bool gameStart); // similar to above
 
         std::string halfResources();
+
+        void addResources(ResourceList toAdd);
 };
 
 #endif

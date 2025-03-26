@@ -17,7 +17,7 @@ class Edge {
         ~Edge();
         Edge(int i) : vertices{nullptr, nullptr}, road{nullptr}, index{i} {}
         Edge(Edge&& other);
-        const Road* getRoad() { return &(*road); }
+        const Road* getRoad() { return road ? &(*road) : nullptr; }
         const Vertex** getVertices() { return const_cast<const Vertex**>(vertices); }
         std::string getName() const;
 };

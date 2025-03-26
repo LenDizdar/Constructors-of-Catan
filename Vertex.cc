@@ -22,7 +22,7 @@ string Vertex::getName() const {
 
     if (residence) {
 
-        return residence->getColour();
+        return residence->getColour() + residence->getDesc();
 
     }
 

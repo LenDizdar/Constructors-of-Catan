@@ -16,7 +16,7 @@ string Edge::getName() const {
 
     if (road) {
 
-        return "A";
+        return road->getColour() + "R";
 
     }
 

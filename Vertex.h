@@ -19,15 +19,15 @@ class Vertex : public Observer {
     friend class Builder;
     Edge* edges[3];
     int index;
+    void improve();
     public:
         ~Vertex();
         Vertex(int i) : residence{nullptr}, edges{nullptr, nullptr, nullptr}, index{i} {}
         Vertex(Vertex&& other);
-        Building* getBuilding() const { return &(*residence); }
+        Building* getBuilding() const { return residence ? &(*residence) : nullptr; }
         void notify(Subject& whoNotified);
         bool canBuildOn(Builder& builder);
         std::string getName() const;
-        void improve();
 };
 
 // istream& operator<<(istream& in, Vertex& vert);

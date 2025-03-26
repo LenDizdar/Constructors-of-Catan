@@ -20,6 +20,8 @@ class Board {
     public:
         void rolled(int dieNum);
         std::string getDesc();
+        Vertex& getVertex(int index) { return vertices.at(index); }
+        Edge& getEdge(int index) { return edges.at(index); }
 };
 
 #endif

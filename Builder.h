@@ -6,6 +6,7 @@
 #include "Observer.h"
 #include "Building.h"
 #include "ResourceList.h"
+#include "Dice.h"
 
 class Edge;
 class Vertex;
@@ -15,19 +16,17 @@ class Builder : public Observer {
     std::vector<Vertex*> buildingLocations;
     ResourceList hand;
     int victoryPoints;
-    //std::unique_ptr<Dice> die;
+    Dice* die;
     public:
-        Builder(std::string colour);
+        Builder(std::string colour, Dice* die);
 
         void notify(Subject& whoNotified);
 
         int getVictoryPoints(); // does the calculation so returned IS up to date
 
-        //void setLoaded();
+        void setDie(Dice* newDie);
 
-        //void setFair();
-
-        //void roll();
+        int roll();
 
         std::string getColour();
 

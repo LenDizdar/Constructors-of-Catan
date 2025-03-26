@@ -50,7 +50,7 @@ std::string Builder::getResidencesDesc() {
 }
 
 bool Builder::improve(Vertex *v) {
-    if (v->getBuilding() && v->getBuilding()->getColour() == colour) {
+    /*if (v->getBuilding() && v->getBuilding()->getColour() == colour) {
         try {
             ResourceList improveResources = v->residence->getImproveResources();
             if (hand >= improveResources) {
@@ -66,7 +66,21 @@ bool Builder::improve(Vertex *v) {
         }
     } else {
         return false;
+    }*/
+    if (v->getBuilding() && v->getBuilding()->getColour() == colour) {
+        ResourceList improveResources;
+        try {
+            improveResources = v->getBuilding()->getImproveResources();
+        } catch (...) {
+            return false;
+        }
+        if (hand >= improveResources) {
+            hand -= improveResources;
+            v->improve();
+            return true;
+        }
     }
+    return false;
 }
 
 bool Builder::buildRoad(Edge *e) {

@@ -26,6 +26,7 @@ class Vertex : public Observer {
         void notify(Subject& whoNotified);
         bool canBuildOn(Builder& builder);
         std::string getName() const;
+        void improve();
 };
 
 // istream& operator<<(istream& in, Vertex& vert);

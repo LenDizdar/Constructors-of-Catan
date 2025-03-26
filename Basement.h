@@ -14,9 +14,9 @@ class Basement : public Building {
             return ResourceList{1, 1, 1, 0, 1};
         }
 
-        std::unique_ptr<Building> improve(std::unique_ptr<Building> curr) { 
-            return std::make_unique<House>(move(curr)); 
-        }
+        //std::unique_ptr<Building> improve(std::unique_ptr<Building> curr) { 
+        //    return std::make_unique<House>(move(curr)); 
+        //}
 
         virtual int getPointValue() override { return 1; }
 

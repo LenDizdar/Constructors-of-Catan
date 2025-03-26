@@ -4,6 +4,8 @@
 #include "Building.h"
 #include "Builder.h"
 #include "Road.h"
+#include "Basement.h"
+#include "House.h"
 using namespace std;
 
 Vertex::~Vertex() = default;
@@ -47,4 +49,14 @@ bool Vertex::canBuildOn(Builder& builder) {
         }
     }
     return isAttached;
+}
+
+void Vertex::improve() {
+    if (residence) {
+        if (dynamic_cast<Basement*>(&(*residence)) != nullptr) {
+            residence = make_unique<House>(move(residence));
+        } else if (dynamic_cast<House*>(&(*residence)) != nullptr) {
+            residence = make_unique<Tower>(move(residence));
+        }
+    }
 }

@@ -15,9 +15,9 @@ class House : public Decorator {
             return ResourceList{0, 0, 2, 3, 0}; 
         }
 
-        std::unique_ptr<Building> improve(std::unique_ptr<Building> curr) { 
-            return std::make_unique<Tower>(move(curr)); 
-        }
+        //std::unique_ptr<Building> improve(std::unique_ptr<Building> curr) { 
+        //    return std::make_unique<Tower>(move(curr)); 
+        //}
 
         virtual int getPointValue() override { return foundation->getPointValue() + 1; }
 

@@ -22,7 +22,7 @@ class Building : public Constructable, public Subject {
 
         virtual std::string getDesc() = 0;
 
-        virtual std::unique_ptr<Building> improve(std::unique_ptr<Building> curr) = 0;
+        //virtual std::unique_ptr<Building> improve(std::unique_ptr<Building> curr) = 0;
 
         virtual ResourceList getImproveResources() = 0;
 

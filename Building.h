@@ -11,21 +11,16 @@ class Building : public Constructable, public Subject {
     // When notified by vertex this is called to update what is sent to the Builder
     void setLastResource(ResourceList *oResList) { resList->set(*oResList); }
     friend class Vertex;
-    protected:
-        int pointValue;
-        int numResources;
-        std::string buildingType;
     public:
         // By default a building's resList is that of a PARK, all 0s
-        Building(int pVal, int numRes, std::string buildingType, std::string colour) : 
-            Constructable{colour}, Subject{Resource::PARK}, pointValue{pVal},
-            numResources{numRes}, buildingType{buildingType} {}
+        Building(std::string colour) : 
+            Constructable{colour}, Subject{Resource::PARK} {}
 
-        int getPointValue() { return pointValue; }
+        virtual int getPointValue() = 0;
 
-        int getNumResources() { return numResources; }
+        virtual int getNumResources() = 0;
 
-        std::string getDesc() { return buildingType; }
+        virtual std::string getDesc() = 0;
 
         virtual std::unique_ptr<Building> improve(std::unique_ptr<Building> curr) = 0;
 

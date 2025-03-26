@@ -5,18 +5,12 @@
 
 class Decorator : public Building {
     // The building on which this decorator is built
-    std::unique_ptr<Building> foundation;
+    protected:
+        std::unique_ptr<Building> foundation;
     public:
-        Decorator(int pVal, int numRes, std::string buildingType, 
-                  std::unique_ptr<Building> foundation) : 
-            Building{pVal, numRes, buildingType, foundation->getColour()}, 
+        Decorator(std::unique_ptr<Building> foundation) : 
+            Building{foundation->getColour()}, 
             foundation{std::move(foundation)} {}
-
-        // Take note! This means that decorator point values are EXTRA points
-        int getPointValue() { return pointValue + foundation->getPointValue(); }
-
-        // Take note! This means that decorator resource values are EXTRA resources
-        int getNumResources() { return numResources + foundation->getNumResources(); }
 
         virtual ~Decorator() = 0;
 };

@@ -1,4 +1,5 @@
 #include "RandomBoard.h"
+#include "LoadedBoard.h"
 #include <iostream>
 #include <random>
 #include <string>
@@ -15,6 +16,7 @@ int main (int argc, char* argv[]) {
     std::string fileName = "layout.txt"; // Default file name
     bool loadBoard = false;
     bool randomBoard = false;
+    bool fullSave = false;
 
     // Handling command line arguments
     for (int i = 1; i < argc; i++) {
@@ -38,6 +40,7 @@ int main (int argc, char* argv[]) {
 
         } else if (arg == "-load") {
 
+            fullSave = true;
             loadBoard = true;
 
         }
@@ -49,23 +52,26 @@ int main (int argc, char* argv[]) {
 
     if (loadBoard) {
 
-        // To implement
+        b = new LoadedBoard(fileName, fullSave);
 
     } else if (randomBoard) {
 
+        b = new RandomBoard(seed);
 
+    } else {
+
+        // Default file open
+        b = new LoadedBoard(fileName, false);
 
     }
 
-    //std::cout << b->getDesc() << std::endl;
+    std::cout << b->getDesc() << std::endl;
 
-    Board b2 = RandomBoard(seed);
-
-    Goose g(b2.findGoose());
+    /*Goose g(b2.findGoose());
     for (int i = 1; i <= 18; ++i) {
         g.move(b2.getTile(i));
         std::cout << b2.getDesc() << std::endl;
-    }
+    }*/
 
 
 }

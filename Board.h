@@ -18,6 +18,7 @@ class Board {
         std::vector<Vertex> vertices;
         std::vector<Edge> edges;
         std::vector<Tile> tiles;
+        void connect();
     public:
         void rolled(int dieNum);
         std::string getDesc();

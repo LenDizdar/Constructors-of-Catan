@@ -7,6 +7,7 @@
 class Tile : public Subject {
     int rollNum;
     bool isBlocked;
+    friend class Goose;
     public:
         Tile(int brick, int energy, int glass, int heat, int wifi, int rollNum); // Constructor
                                                                       

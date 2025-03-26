@@ -11,6 +11,15 @@ void Board::rolled(int dieNum) {
     }
 }
 
+Tile* Board::findGoose() {
+    for (auto& tile : tiles) {
+        if (tile.getIsBlocked()) {
+            return &tile;
+        }
+    }
+    return nullptr;
+}
+
 string Board::getLineTop(int left, int edge, int right) {
 
     ostringstream oss;
@@ -38,6 +47,14 @@ string Board::getLineMiddle(int left, int tile, int right) {
 
 }
 
+string Board::gooseString(int tileIdx) {
+    if (tiles.at(tileIdx).getIsBlocked()) {
+        return "  GEESE  ";
+    } else {
+        return "         ";
+    }
+}
+
 string Board::getDesc() {
     // Printing the board can wait, we need building implementation first.
     // (for colours)
@@ -50,7 +67,7 @@ string Board::getDesc() {
     oss << "                            | " << tiles.at(0).getResourceName() << "  |" << endl;
     oss << "                " << getLineTop(2, 3, 3) << "  ";
     oss << setw(2) << tiles.at(0).getRollNumStr() << "  " << getLineTop(4, 4, 5) << endl;
-    oss << "                  |         |         |         |" << endl;
+    oss << "                  |         |" << gooseString(0)<< "|         |" << endl;
     oss << "                 " << getLineMiddle(5, 1, 6);
     oss << "        " << getLineMiddle(7, 2, 8) << endl;
     oss << "                  | " << tiles.at(1).getResourceName() << "  |";
@@ -60,7 +77,7 @@ string Board::getDesc() {
     oss << getLineTop(8, 10, 9);
     oss << "  " << setw(2) << tiles.at(2).getRollNumStr() << "  ";
     oss << getLineTop(10, 11, 11) << endl;
-    oss << "        |         |         |         |         |         |" << endl;
+    oss << "        |         |" << gooseString(1)<< "|         |" << gooseString(2) << "|         |" << endl;
     oss << "       " << getLineMiddle(12, 3, 13);
     oss << "        " << getLineMiddle(14, 4, 15);
     oss << "        " << getLineMiddle(16, 5, 17) << endl;
@@ -74,7 +91,7 @@ string Board::getDesc() {
     oss << "  " <<  getLineTop(15, 19, 16);
     oss << "  " << setw(2) << tiles.at(5).getRollNumStr();
     oss << "  |" << setw(2) << vertices.at(17).getName() << setw(0) << "|" << endl;
-    oss << "        |         |         |         |         |         |" << endl;
+    oss << "        |" << gooseString(3)<< "|         |" << gooseString(4)<< "|         |" << gooseString(5)<< "|" << endl;
     oss << "       " << setw(2) << edges.at(20).getName();
     oss << "        " << getLineMiddle(21, 6, 22);
     oss << "        " << getLineMiddle(23, 7, 24);
@@ -87,7 +104,7 @@ string Board::getDesc() {
     oss << getLineTop(20, 27, 21);
     oss << "  " << setw(2) << tiles.at(7).getRollNumStr() << "  ";
     oss << getLineTop(22, 28, 23) << endl;
-    oss << "        |         |         |         |         |         |" << endl;
+    oss << "        |         |" << gooseString(6)<< "|         |" << gooseString(7)<< "|         |" << endl;
     oss << "       " << getLineMiddle(29, 8, 30);
     oss << "        " << getLineMiddle(31, 9, 32);
     oss << "        " << getLineMiddle(33, 10, 34) << endl;
@@ -101,7 +118,7 @@ string Board::getDesc() {
     oss << "  " <<  getLineTop(27, 36, 28);
     oss << "  " << setw(2) << tiles.at(10).getRollNumStr();
     oss << "  |" << setw(2) << vertices.at(29).getName() << setw(0) << "|" << endl;
-    oss << "        |         |         |         |         |         |" << endl;
+    oss << "        |" << gooseString(8)<< "|         |" << gooseString(9)<< "|         |" << gooseString(10)<< "|" << endl;
     oss << "       " << setw(2) << edges.at(37).getName();
     oss << "        " << getLineMiddle(38, 11, 39);
     oss << "        " << getLineMiddle(40, 12, 41);
@@ -114,7 +131,7 @@ string Board::getDesc() {
     oss << getLineTop(32, 44, 33);
     oss << "  " << setw(2) << tiles.at(12).getRollNumStr() << "  ";
     oss << getLineTop(34, 45, 35) << endl;
-    oss << "        |         |         |         |         |         |" << endl;
+    oss << "        |         |" << gooseString(11)<< "|         |" << gooseString(12)<< "|         |" << endl;
     oss << "       " << getLineMiddle(46, 13, 47);
     oss << "        " << getLineMiddle(48, 14, 49);
     oss << "        " << getLineMiddle(50, 15, 51) << endl;
@@ -128,7 +145,7 @@ string Board::getDesc() {
     oss << "  " <<  getLineTop(39, 53, 40);
     oss << "  " << setw(2) << tiles.at(15).getRollNumStr();
     oss << "  |" << setw(2) << vertices.at(41).getName() << setw(0) << "|" << endl;
-    oss << "        |         |         |         |         |         |" << endl;
+    oss << "        |" << gooseString(13)<< "|         |" << gooseString(14)<< "|         |" << gooseString(15)<< "|" << endl;
     oss << "       " << setw(2) << edges.at(54).getName();
     oss << "        " << getLineMiddle(55, 16, 56);
     oss << "        " << getLineMiddle(57, 17, 58);
@@ -141,7 +158,7 @@ string Board::getDesc() {
     oss << getLineTop(44, 61, 45);
     oss << "  " << setw(2) << tiles.at(17).getRollNumStr() << "  ";
     oss << getLineTop(46, 62, 47) << endl;
-    oss << "                  |         |         |         |" << endl;
+    oss << "                  |" << gooseString(16)<< "|         |" << gooseString(17)<< "|" << endl;
     oss << "                 " << setw(2) << edges.at(63).getName();
     oss << "        " << getLineMiddle(64, 18, 65);
     oss << "        " << setw(2) << edges.at(66).getName() << endl;
@@ -150,7 +167,7 @@ string Board::getDesc() {
     oss << "                " << getLineTop(48, 67, 49);
     oss << "  " << setw(2) << tiles.at(18).getRollNumStr() << "  ";
     oss << getLineTop(50, 68, 51) << endl;
-    oss << "                            |         |" << endl;
+    oss << "                            |" << gooseString(18)<< "|" << endl;
     oss << "                           " << edges.at(69).getName();
     oss << "        " << edges.at(70).getName() << endl;
     oss << "                            |         |" << endl;    

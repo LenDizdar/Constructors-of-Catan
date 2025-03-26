@@ -7,6 +7,7 @@
 #include "FairDice.h"
 #include "LoadedDice.h"
 #include "Dice.h"
+#include "Goose.h"
 
 int main (int argc, char* argv[]) {
 
@@ -57,6 +58,15 @@ int main (int argc, char* argv[]) {
     }
 
     //std::cout << b->getDesc() << std::endl;
+
+    Board b2 = RandomBoard(seed);
+
+    Goose g(b2.findGoose());
+    for (int i = 1; i <= 18; ++i) {
+        g.move(b2.getTile(i));
+        std::cout << b2.getDesc() << std::endl;
+    }
+
 
 }
 

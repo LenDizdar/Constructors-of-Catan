@@ -13,11 +13,15 @@ Tile::Tile(int brick, int energy, int glass, int heat, int wifi, int rollNum) :
 }
 
 
-Tile::Tile(Resource r, int rollNum) : Subject{r}, rollNum{rollNum}, isBlocked{false} {};
+Tile::Tile(Resource r, int rollNum) : Subject{r}, rollNum{rollNum}, isBlocked{false} {
+    if (r == Resource::PARK) {
+        isBlocked = true;
+    }
+};
 
 
 void Tile::roll(int dieRoll) {
-    if (dieRoll == rollNum) {
+    if (dieRoll == rollNum && !isBlocked) {
         notifyObservers();
     }
 }

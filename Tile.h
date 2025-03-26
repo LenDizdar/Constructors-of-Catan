@@ -3,6 +3,7 @@
 #include "ResourceList.h"
 #include "Subject.h"
 #include <string>
+#include "Builder.h"
 
 class Tile : public Subject {
     int rollNum;
@@ -26,6 +27,8 @@ class Tile : public Subject {
         std::string getRollNumStr() const; // Getter (but a string)
 
         bool getIsBlocked() const { return isBlocked; } // Getter
+
+        std::vector<Builder*>getBuildersOnTile();
 };
 
 #endif

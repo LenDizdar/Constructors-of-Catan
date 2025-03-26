@@ -60,3 +60,15 @@ std::string Tile::getResourceName() const {
     }
     return " PARK ";
 }
+
+// Exists so when a goose is moved we can find who can be stolen from.
+std::vector<Builder*> Tile::getBuildersOnTile() {
+    std::vector<Builder*> toRet;
+    for (auto& obs : getObservers()) {
+        Builder* curr = dynamic_cast<Builder*>(obs);
+        if (curr) {
+            toRet.emplace_back(curr);
+        }
+    }
+    return toRet;
+}

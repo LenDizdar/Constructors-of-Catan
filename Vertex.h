@@ -22,6 +22,7 @@ class Vertex : public Observer {
     public:
         ~Vertex();
         Vertex(int i) : residence{nullptr}, edges{nullptr, nullptr, nullptr}, index{i} {}
+        Vertex(Vertex&& other);
         Building* getBuilding() const { return &(*residence); }
         void notify(Subject& whoNotified);
         bool canBuildOn(Builder& builder);

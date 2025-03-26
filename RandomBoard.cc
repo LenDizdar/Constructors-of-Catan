@@ -56,14 +56,14 @@ RandomBoard::RandomBoard(unsigned seed) : Board{} {
     //Creating verticies
     for (int i = 0; i < 54; ++i) {
 
-        vertices.emplace_back(Vertex(i));
+        vertices.emplace_back(i);
 
     }
 
     //Creating edges
     for (int i = 0; i < 72; ++i) {
 
-        edges.emplace_back(Edge(i));
+        edges.emplace_back(i);
 
     }
 

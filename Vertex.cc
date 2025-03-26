@@ -10,6 +10,14 @@ using namespace std;
 
 Vertex::~Vertex() = default;
 
+Vertex::Vertex(Vertex &&other) { 
+    residence = move(other.residence);
+    edges[0] = other.edges[0];
+    edges[1] = other.edges[1];
+    edges[2] = other.edges[2];
+    index = other.index;
+}
+
 string Vertex::getName() const {
 
     if (residence) {

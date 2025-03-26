@@ -49,6 +49,10 @@ std::string Builder::getResidencesDesc() {
     return toRet;
 }
 
+std::string Builder::getColour() {
+    return colour;
+}
+
 bool Builder::improve(Vertex *v) {
     /*if (v->getBuilding() && v->getBuilding()->getColour() == colour) {
         try {

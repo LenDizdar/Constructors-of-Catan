@@ -16,6 +16,7 @@ class Building : public Constructable, public Subject {
         Building(std::string colour) : 
             Constructable{colour}, Subject{Resource::PARK} {}
 
+
         virtual int getPointValue() = 0;
 
         virtual int getNumResources() = 0;
@@ -25,8 +26,6 @@ class Building : public Constructable, public Subject {
         //virtual std::unique_ptr<Building> improve(std::unique_ptr<Building> curr) = 0;
 
         virtual ResourceList getImproveResources() = 0;
-
-        virtual ~Building() = 0;
 };
 
 #endif

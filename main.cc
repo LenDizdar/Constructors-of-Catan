@@ -4,6 +4,9 @@
 #include <string>
 #include <fstream>
 #include "Builder.h"
+#include "FairDice.h"
+#include "LoadedDice.h"
+#include "Dice.h"
 
 int main (int argc, char* argv[]) {
 

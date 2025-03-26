@@ -43,7 +43,13 @@ class Builder : public Observer {
 
         std::string halfResources();
 
-        void addResources(ResourceList toAdd);
+        Resource loseRandomResource(); // returns park if hand is empty
+
+        void addResources(ResourceList toAdd); //mainly for testing
+
+        void addOneResource(Resource toAdd);
+
+        bool trade(Resource losing, Resource receiving, Builder* partner); // returns true if trade successful
 };
 
 #endif

@@ -6,6 +6,7 @@
 #include "Vertex.h"
 
 #include <random>
+#include <algorithm>
 
 using namespace std;
 
@@ -176,4 +177,52 @@ string Builder::halfResources() {
 
 void Builder::addResources(ResourceList toAdd) {
     hand += toAdd;
+}
+
+void Builder::addOneResource(Resource toAdd) {
+    hand.change(toAdd, 1);
+}
+
+bool Builder::trade(Resource losing, Resource receiving, Builder* partner) {
+    if (partner && hand.get(losing) && partner->hand.get(receiving)) {
+        hand.change(losing, -1);
+        partner->hand.change(losing, 1);
+        hand.change(receiving, 1);
+        partner->hand.change(receiving, -1);
+        return true;
+    }
+    return false;
+}
+
+Resource Builder::loseRandomResource() {
+    vector<Resource> possible;
+
+    for (int i = 0; i < hand.get(Resource::BRICK); ++i) {
+        possible.emplace_back(Resource::BRICK);
+    }
+    for (int i = 0; i < hand.get(Resource::ENERGY); ++i) {
+        possible.emplace_back(Resource::ENERGY);
+    }
+    for (int i = 0; i < hand.get(Resource::GLASS); ++i) {
+        possible.emplace_back(Resource::GLASS);
+    }
+    for (int i = 0; i < hand.get(Resource::HEAT); ++i) {
+        possible.emplace_back(Resource::HEAT);
+    }
+    for (int i = 0; i < hand.get(Resource::WIFI); ++i) {
+        possible.emplace_back(Resource::WIFI);
+    }
+
+    if (possible.size() == 0) {
+        return Resource::PARK;
+    }
+
+    random_device rd;
+    mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(1, possible.size());
+    int idx = distrib(gen) - 1;
+
+    hand.change(possible.at(idx), -1);
+    return possible.at(idx);
+
 }

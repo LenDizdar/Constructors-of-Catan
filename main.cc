@@ -10,25 +10,53 @@
 
 int main (int argc, char* argv[]) {
 
-    // Default seed
-    unsigned seed = 12345;
+    unsigned seed = 12345; // Default seed
+    std::string fileName = "layout.txt"; // Default file name
+    bool loadBoard = false;
+    bool randomBoard = false;
 
-    //Handling command line arguments
-    for (int i = 0; i < argc; i++) {
+    // Handling command line arguments
+    for (int i = 1; i < argc; i++) {
 
         std::string arg = argv[i];
         
         if (arg == "-seed") {
 
             seed = std::stoi(argv[i + 1]);
+            ++i;
+
+        } else if (arg == "-board") {
+
+            fileName = argv[i + 1];
+            loadBoard = true;
+            ++i;
+
+        } else if (arg == "-random-board") {
+
+            randomBoard = true;
+
+        } else if (arg == "-load") {
+
+            loadBoard = true;
 
         }
 
     }
 
-    RandomBoard b = RandomBoard(seed);
+    // Creating Board based on command line input
+    Board *b = nullptr;
 
-    std::cout << b.getDesc() << std::endl;
+    if (loadBoard) {
+
+        // To implement
+
+    } else if (randomBoard) {
+
+
+
+    }
+
+    //std::cout << b->getDesc() << std::endl;
 
 }
 

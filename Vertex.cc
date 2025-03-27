@@ -44,7 +44,7 @@ bool Vertex::canBuildOn(Builder& builder) {
     for (auto& edge : edges) {
         if (edge) {
             // check if the builder has a road connected to this vertex
-            if (edge->getRoad()->getColour() == builder.getColour()) {
+            if (edge->getRoad() && edge->getRoad()->getColour() == builder.getColour()) {
                 isAttached = true;
             }
 

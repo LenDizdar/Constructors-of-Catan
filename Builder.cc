@@ -73,8 +73,20 @@ bool Builder::improve(Vertex *v) {
 
 bool Builder::buildRoad(Edge *e) {
     if (!e->getRoad()) {
+        bool canBuild = false;
         for (int i = 0; i < 2; ++i) {
-            if (e->getVertices()[i] && e->getVertices()[i]->getBuilding()->getColour() == colour) {
+            if (e->getVertices()[i] && e->getVertices()[i]->getBuilding() &&
+                e->getVertices()[i]->getBuilding()->getColour() == colour) {
+                canBuild = true;
+            }
+            for (int j = 0; j < 3; ++j) {
+                if (e->getVertices()[i] && e->getVertices()[i]->edges[j] &&
+                    e->getVertices()[i]->edges[j]->getRoad() &&
+                    e->getVertices()[i]->edges[j]->getRoad()->getColour() == colour) {
+                        canBuild = true;
+                    }
+            }
+            if (canBuild) {
                 if (hand >= Road::getCost()) {
                     hand -= Road::getCost();
                     e->road = make_unique<Road>(colour);
@@ -90,10 +102,14 @@ bool Builder::buildRoad(Edge *e) {
 
 bool Builder::buildRes(Vertex* v, bool gameStart) {
     if (gameStart) {
-        v->residence = make_unique<Basement>(colour);
-        return true;
+        if (v->residence) {
+            return false;
+        } else {
+            v->residence = make_unique<Basement>(colour);
+            return true;
+        }
     } else {
-        if (v->canBuildOn(*this) && hand >= Basement::getCost()) {
+        if (v && v->canBuildOn(*this) && hand >= Basement::getCost()) {
             hand -= Basement::getCost();
             v->residence = make_unique<Basement>(colour);
             return true;

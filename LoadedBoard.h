@@ -6,7 +6,7 @@
 class LoadedBoard : public Board {
     
     public:
-        LoadedBoard(std::string fileName, bool saveFile); // Constructor
+        LoadedBoard(std::string saveInfo); // Constructor
 
 };
 

@@ -1,33 +1,11 @@
 #include "LoadedBoard.h"
-#include <fstream>
 #include <sstream>
 
 using namespace std;
 
-LoadedBoard::LoadedBoard(string fileName, bool saveFile) : Board{} {
+LoadedBoard::LoadedBoard(string saveInfo) : Board{} {
 
-    ifstream file{fileName};
-    istringstream iss;
-    
-    // From only layout
-    if (!saveFile) {
-
-        string s;
-        getline(file, s);
-        iss = istringstream{s};
-
-    // From full save fill
-    } else {
-
-        string s;
-        for (int i = 0; i < 6; ++i) {
-
-            getline(file, s);
-
-        }
-        iss = istringstream{s};
-
-    }
+    istringstream iss{saveInfo};
 
     for (int i = 0; i < 19; i++) {
 

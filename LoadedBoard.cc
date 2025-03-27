@@ -9,15 +9,23 @@ LoadedBoard::LoadedBoard(string fileName, bool saveFile) : Board{} {
     ifstream file{fileName};
     istringstream iss;
     
+    // From only layout
     if (!saveFile) {
 
         string s;
         getline(file, s);
         iss = istringstream{s};
 
+    // From full save fill
     } else {
 
+        string s;
+        for (int i = 0; i < 6; ++i) {
 
+            getline(file, s);
+
+        }
+        iss = istringstream{s};
 
     }
 

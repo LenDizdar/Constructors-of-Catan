@@ -40,8 +40,10 @@ int main (int argc, char* argv[]) {
 
         } else if (arg == "-load") {
 
+            fileName = argv[i + 1];
             fullSave = true;
             loadBoard = true;
+            ++i;
 
         }
 

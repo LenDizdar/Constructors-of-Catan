@@ -54,7 +54,15 @@ std::string Builder::getColour() {
     return colour;
 }
 
-bool Builder::improve(Vertex *v) {
+bool Builder::improve(Vertex *v, bool gameStart) {
+
+    if (gameStart && v->getBuilding() && v->getBuilding()->getColour() == colour) {
+
+        v->improve();
+        return true;
+
+    }
+
     if (v->getBuilding() && v->getBuilding()->getColour() == colour) {
         ResourceList improveResources;
         try {
@@ -71,7 +79,23 @@ bool Builder::improve(Vertex *v) {
     return false;
 }
 
-bool Builder::buildRoad(Edge *e) {
+bool Builder::buildRoad(Edge *e, bool gameStart) {
+    
+    if (gameStart) {
+
+        if (e->getRoad()) {
+
+            return false;
+
+        } else {
+
+            e->road = make_unique<Road>(colour);
+            return true;
+
+        }
+
+    }
+    
     if (!e->getRoad()) {
         bool canBuild = false;
         for (int i = 0; i < 2; ++i) {

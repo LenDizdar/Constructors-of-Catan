@@ -34,9 +34,9 @@ class Builder : public Observer {
 
         std::string getResidencesDesc();
 
-        bool improve(Vertex *v); // returns true if could improve, false otw
+        bool improve(Vertex *v, bool gameStart); // returns true if could improve, false otw
 
-        bool buildRoad(Edge *e); // similar to above
+        bool buildRoad(Edge *e, bool gameStart); // similar to above
 
         bool buildRes(Vertex* v, bool gameStart); // similar to above
 

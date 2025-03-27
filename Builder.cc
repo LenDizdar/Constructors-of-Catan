@@ -127,13 +127,20 @@ bool Builder::buildRoad(Edge *e, bool gameStart) {
 }
 
 bool Builder::buildRes(Vertex* v, bool gameStart) {
+    if (!v || !v->edges) return false;
     if (gameStart) {
-        if (v->residence) {
-            return false;
-        } else {
-            v->residence = make_unique<Basement>(colour);
-            return true;
+        for (auto& edge : {v->edges[0], v->edges[1], v->edges[2]}) {
+            if (edge) {
+                for (auto& vert : {edge->vertices[0], edge->vertices[1]}) {
+                    if (vert->getBuilding()) {
+                        return false;
+                    }
+                }
+            }
         }
+        v->residence = make_unique<Basement>(colour);
+        return true;
+        
     } else {
         if (v && v->canBuildOn(*this) && hand >= Basement::getCost()) {
             hand -= Basement::getCost();

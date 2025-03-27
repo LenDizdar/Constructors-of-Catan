@@ -24,6 +24,8 @@ class Builder : public Observer {
 
         int getVictoryPoints(); // does the calculation so returned IS up to date
 
+        ResourceList& getHand() { return hand; }
+
         void setDie(Dice* newDie);
 
         int roll();

@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include "Builder.h"
+#include "Basement.h"
 #include "FairDice.h"
 #include "LoadedDice.h"
 #include "Dice.h"
@@ -89,6 +90,20 @@ bool validVertex(int in) {
     return 0 <= in && in <= 53;
 }
 
+bool validTurnBegin(string str) {
+    return str == "load" || str == "fair" || str == "roll";
+}
+
+bool validTurnCmd(string str) {
+    return str == "board" || str == "status" || str == "residences" ||
+           str == "build-road" || str == "build-res" || str == "improve" ||
+           str == "trade" || str == "next" || str == "save" || str == "help";
+}
+
+bool validEdge(int in) {
+    return 0 <= in && in <= 71;
+}
+
 int main (int argc, char* argv[]) {
 
     unsigned seed = 12345; // Default seed
@@ -134,21 +149,25 @@ int main (int argc, char* argv[]) {
     unique_ptr<Dice> loaded = make_unique<LoadedDice>(LoadedDice());
     unique_ptr<Dice> fair = make_unique<FairDice>(FairDice(seed));
     vector<Builder> builders;
-    unsigned curr_builder = 0;
+    unsigned turn = 0;
 
     if (loadBoard && fullSave) {
 
         ifstream file{fileName};
-        string turn, blue, red, orange, yellow, boardSave, gooseLoc;
-        getline(file, turn);
+        string turn_str, blue, red, orange, yellow, boardSave, gooseLoc;
+        getline(file, turn_str);
         getline(file, blue);
         getline(file, red);
         getline(file, orange);
         getline(file, yellow);
         getline(file, boardSave);
         getline(file, gooseLoc);
-        // curr_builder should be different, find where that colour is in builders.
-        curr_builder = stoi(turn);
+        for (int i = 0; i < static_cast<int>(builders.size()); ++i) {
+            if (builders[i].getColour() == turn_str) {
+                turn = i;
+                break;
+            }
+        }
         b = make_unique<LoadedBoard>(boardSave);
         addBuilder("Blue", loaded.get(), blue, builders, &(*b));
         addBuilder("Red", loaded.get(), red, builders, &(*b));
@@ -181,9 +200,8 @@ int main (int argc, char* argv[]) {
 
     cout << b->getDesc() << endl;
 
-    
-    // Beginning of Game
     try {
+        // Beginning of Game phase
         if (!fullSave) {
 
             int bSize = builders.size();
@@ -201,14 +219,99 @@ int main (int argc, char* argv[]) {
                     cout << "You cannot build here." << endl;
                 }
             }
-        }
 
+            cout << b->getDesc() << endl;
+        } 
+        // ~Beginning of Game phase
+        
+        // Game loop
         while (true) {
-            cout << "Builder " << builders[curr_builder].getColour() << "'s turn." << endl;
-            curr_builder = (curr_builder + 1) % builders.size();
-            // Break at end of first turn FOR TESTING
-            if (curr_builder == builders.size() - 1) break;
+            Builder curr_builder = builders[turn];
+            cout << "Builder " << curr_builder.getColour() << "'s turn." << endl;
+            
+            // Beginning of turn phase
+            while (true) {
+                string dieAction = read_valid<string>(&validTurnBegin, "Invalid command.\nTry 'load', 'fair', or 'roll'.\n");
+                if (dieAction == "load") {
+                    curr_builder.setDie(&(*loaded));
+                    cout << "Dice loaded." << endl;
+                    continue;
+                } else if (dieAction == "fair") {
+                    curr_builder.setDie(&(*fair));
+                    cout << "Dice fair." << endl;
+                    continue;
+                } else {
+                    // roll!
+                    b->rolled(curr_builder.roll());
+                    break;
+                }
+                cout << "Invalid command?\nTry 'load', 'fair', or 'roll'.\n";
+            }
+            // ~Beginning of turn phase
+
+            // During the turn phase
+            while (true) {
+                string builderAction = read_valid<string>(&validTurnCmd, "Invalid command.\nTry 'help' for a list of valid commands.\n");
+
+                if (builderAction == "board") {
+                    cout << b->getDesc() << endl;
+                    continue;
+                } else if (builderAction == "status") {
+                    cout << curr_builder.getStatusDesc() << endl;
+                    continue;
+                } else if (builderAction == "residences") {
+                    cout << curr_builder.getResidencesDesc() << endl;
+                    continue;
+                } else if (builderAction == "build-road") {
+                    while (true) {
+                        // currently this asks for more ints until a valid place to build is given. CHANGE THIS
+                        int edgeNum = read_valid<int>(&validEdge, "You cannot build here.");
+                        if (curr_builder.buildRoad(&b->getEdge(edgeNum), false)) {
+                            break;
+                        } else if (!(curr_builder.getHand() >= Road::getCost())) {
+                            cout << "You do not have enough resources." << endl;
+                        } else {
+                            cout << "You cannot build here." << endl;
+                        }
+                    }
+                        continue;
+                } else if (builderAction == "build-res") {
+                    // currently this asks for more ints until a valid place to build is given. CHANGE THIS
+                    int vertNum = read_valid<int>(&validVertex, "You cannot build here.");
+                    if (curr_builder.buildRes(&b->getVertex(vertNum), false)) {
+                            break;
+                    } else if (!(curr_builder.getHand() >= Basement::getCost())) {
+                            cout << "You do not have enough resources." << endl;
+                    } else {
+                            cout << "You cannot build here." << endl;
+                    }
+                    continue;
+                } else if (builderAction == "improve") {
+                    continue;
+                } else if (builderAction == "trade") {
+                    continue;
+                } else if (builderAction == "next") {
+                    break;
+                } else if (builderAction == "save") {
+                    // to be implemented
+                    continue;
+                } else if (builderAction == "help") {
+                    cout << "Valid commands:" << endl << "board" << endl << "status" << endl <<
+                    "residences" << endl << "build-road <edge#>" << endl << "build-res <houseing#>" << 
+                    endl << "improve <housing#>" << endl << "trade <colour> <give> <take>" << 
+                    endl << "next" << endl << "save <file>" << endl << "help" << endl;
+                    continue;
+                }
+
+                cout << "Invalid command.\nTry 'help' for a list of valid commands.\n";
+            }
+            // ~During the turn phase
+            
+            
+            turn = (turn + 1) % builders.size();
+            if (turn == builders.size() - 1) break;
         }
+        // ~Game loop
 
     } catch (...) {
         // save then terminate program due to EOF.

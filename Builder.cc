@@ -10,8 +10,16 @@
 
 using namespace std;
 
-Builder::Builder(string colour) : 
-    colour{colour}, buildingLocations{}, hand{0, 0, 0, 0, 0}, victoryPoints{0} {}
+Builder::Builder(string colour, Dice* die) : 
+    colour{colour}, buildingLocations{}, hand{0, 0, 0, 0, 0}, victoryPoints{0}, die{die} {}
+
+void Builder::setDie(Dice* newDie) {
+    die = newDie;
+}
+
+int Builder::roll() {
+    return die->roll();
+}
 
 int Builder::getVictoryPoints() { 
     victoryPoints = 0;
@@ -25,15 +33,7 @@ void Builder::notify(Subject& whoNotified) {
     hand += *(whoNotified.getResList());
 }
 
-//void setLoaded();
-
-//void setFair();
-
-//void roll();
-
 std::string Builder::getStatusDesc() {
-    // <colour> has <numPoints> building points, <numBrick> brick, <numEnergy> energy,
-    // <numGlass> glass, <numHeat> heat, and <numWiFi> WiFi.
     return colour + " has " + to_string(victoryPoints) + 
           to_string(hand.get(Resource::BRICK)) + " brick, " +
           to_string(hand.get(Resource::ENERGY)) + " energy, " +
@@ -55,23 +55,6 @@ std::string Builder::getColour() {
 }
 
 bool Builder::improve(Vertex *v) {
-    /*if (v->getBuilding() && v->getBuilding()->getColour() == colour) {
-        try {
-            ResourceList improveResources = v->residence->getImproveResources();
-            if (hand >= improveResources) {
-                v->residence = v->residence->improve(move(v->residence));
-                hand -= improveResources;
-                return true;
-            } else {
-                return false;
-            }
-        } catch (...) {
-            // This means there is a Tower on v.
-            return false;
-        }
-    } else {
-        return false;
-    }*/
     if (v->getBuilding() && v->getBuilding()->getColour() == colour) {
         ResourceList improveResources;
         try {

@@ -179,7 +179,8 @@ string Board::getDesc() {
 void Board::connect() {
 
     // Hard code all connections :(
-    // Tiles observers
+
+    // Tile observers
     tiles.at(0).attach(&vertices.at(0));
     tiles.at(0).attach(&vertices.at(1));
     tiles.at(0).attach(&vertices.at(3));
@@ -312,5 +313,61 @@ void Board::connect() {
     tiles.at(18).attach(&vertices.at(50));
     tiles.at(18).attach(&vertices.at(52));
     tiles.at(18).attach(&vertices.at(53));
+
+    // Setting vertex neighbour edges
+    vertices.at(0).setEdges(&edges.at(0), &edges.at(1));
+    vertices.at(1).setEdges(&edges.at(1), &edges.at(2));
+    vertices.at(2).setEdges(&edges.at(3), &edges.at(5));
+    vertices.at(3).setEdges(&edges.at(1), &edges.at(3), &edges.at(6));
+    vertices.at(4).setEdges(&edges.at(2), &edges.at(4), &edges.at(7));
+    vertices.at(5).setEdges(&edges.at(4), &edges.at(8));
+    vertices.at(6).setEdges(&edges.at(9), &edges.at(12));
+    vertices.at(7).setEdges(&edges.at(5), &edges.at(9), &edges.at(13));
+    vertices.at(8).setEdges(&edges.at(6), &edges.at(10), &edges.at(14));
+    vertices.at(9).setEdges(&edges.at(7), &edges.at(10), &edges.at(15));
+    vertices.at(10).setEdges(&edges.at(8), &edges.at(11), &edges.at(16));
+    vertices.at(11).setEdges(&edges.at(11), &edges.at(17));
+    vertices.at(12).setEdges(&edges.at(12), &edges.at(20));
+    vertices.at(13).setEdges(&edges.at(13), &edges.at(18), &edges.at(21));
+    vertices.at(14).setEdges(&edges.at(14), &edges.at(18), &edges.at(22));
+    vertices.at(15).setEdges(&edges.at(15), &edges.at(19), &edges.at(23));
+    vertices.at(16).setEdges(&edges.at(16), &edges.at(19), &edges.at(24));
+    vertices.at(17).setEdges(&edges.at(17), &edges.at(25));
+    vertices.at(18).setEdges(&edges.at(20), &edges.at(26), &edges.at(29));
+    vertices.at(19).setEdges(&edges.at(21), &edges.at(26), &edges.at(30));
+    vertices.at(20).setEdges(&edges.at(22), &edges.at(27), &edges.at(31));
+    vertices.at(21).setEdges(&edges.at(23), &edges.at(27), &edges.at(32));
+    vertices.at(22).setEdges(&edges.at(24), &edges.at(28), &edges.at(33));
+    vertices.at(23).setEdges(&edges.at(25), &edges.at(28), &edges.at(34));
+    vertices.at(24).setEdges(&edges.at(29), &edges.at(37));
+    vertices.at(25).setEdges(&edges.at(30), &edges.at(35), &edges.at(38));
+    vertices.at(26).setEdges(&edges.at(31), &edges.at(35), &edges.at(39));
+    vertices.at(27).setEdges(&edges.at(32), &edges.at(36), &edges.at(40));
+    vertices.at(28).setEdges(&edges.at(33), &edges.at(36), &edges.at(41));
+    vertices.at(29).setEdges(&edges.at(34), &edges.at(42));
+    vertices.at(30).setEdges(&edges.at(37), &edges.at(43), &edges.at(46));
+    vertices.at(31).setEdges(&edges.at(38), &edges.at(43), &edges.at(47));
+    vertices.at(32).setEdges(&edges.at(39), &edges.at(44), &edges.at(48));
+    vertices.at(33).setEdges(&edges.at(40), &edges.at(44), &edges.at(49));
+    vertices.at(34).setEdges(&edges.at(41), &edges.at(45), &edges.at(50));
+    vertices.at(35).setEdges(&edges.at(42), &edges.at(45), &edges.at(51));
+    vertices.at(36).setEdges(&edges.at(46), &edges.at(54));
+    vertices.at(37).setEdges(&edges.at(47), &edges.at(52), &edges.at(55));
+    vertices.at(38).setEdges(&edges.at(48), &edges.at(52), &edges.at(56));
+    vertices.at(39).setEdges(&edges.at(49), &edges.at(53), &edges.at(57));
+    vertices.at(40).setEdges(&edges.at(50), &edges.at(53), &edges.at(58));
+    vertices.at(41).setEdges(&edges.at(51), &edges.at(59));
+    vertices.at(42).setEdges(&edges.at(54), &edges.at(60));
+    vertices.at(43).setEdges(&edges.at(55), &edges.at(60), &edges.at(63));
+    vertices.at(44).setEdges(&edges.at(56), &edges.at(61), &edges.at(64));
+    vertices.at(45).setEdges(&edges.at(57), &edges.at(61), &edges.at(65));
+    vertices.at(46).setEdges(&edges.at(58), &edges.at(62), &edges.at(66));
+    vertices.at(47).setEdges(&edges.at(59), &edges.at(62));
+    vertices.at(48).setEdges(&edges.at(63), &edges.at(67));
+    vertices.at(49).setEdges(&edges.at(64), &edges.at(67), &edges.at(69));
+    vertices.at(50).setEdges(&edges.at(65), &edges.at(68), &edges.at(70));
+    vertices.at(51).setEdges(&edges.at(66), &edges.at(68));
+    vertices.at(52).setEdges(&edges.at(69), &edges.at(71));
+    vertices.at(53).setEdges(&edges.at(70), &edges.at(71));
 
 }

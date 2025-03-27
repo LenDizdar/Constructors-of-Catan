@@ -68,3 +68,11 @@ void Vertex::improve() {
         }
     }
 }
+
+void Vertex::setEdges(Edge* e1, Edge* e2, Edge* e3) {
+
+    edges[0] = e1;
+    edges[1] = e2;
+    edges[2] = e3;
+
+}

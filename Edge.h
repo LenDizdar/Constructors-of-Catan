@@ -20,6 +20,7 @@ class Edge {
         const Road* getRoad() { return road ? &(*road) : nullptr; }
         const Vertex** getVertices() { return const_cast<const Vertex**>(vertices); }
         std::string getName() const;
+        void setVerticies(Vertex* v1 = nullptr, Vertex* v2 = nullptr); // Setter
 };
 
 #endif

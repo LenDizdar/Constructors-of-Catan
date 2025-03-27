@@ -24,3 +24,10 @@ string Edge::getName() const {
     return s;
 
 }
+
+void Edge::setVerticies(Vertex* v1, Vertex* v2) {
+
+    vertices[0] = v1;
+    vertices[1] = v2;
+
+}

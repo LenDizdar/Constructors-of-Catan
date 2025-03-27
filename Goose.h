@@ -6,7 +6,7 @@
 class Goose {
     Tile *blocking;
     public:
-        Goose(Tile *blocking) : blocking{blocking} {}
+        Goose(Tile *blocking) : blocking{blocking} { if (blocking) blocking->isBlocked = true; }
         void move(Tile* dest);
 };
 

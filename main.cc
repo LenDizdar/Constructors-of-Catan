@@ -11,6 +11,8 @@
 #include "LoadedDice.h"
 #include "Dice.h"
 #include "Goose.h"
+#include <stdexcept>
+#include <limits>
 
 using namespace std;
 
@@ -66,6 +68,27 @@ void addBuilder(string colour, Dice* die, string fileInput, vector<Builder> &bui
 
 }
 
+constexpr auto max_size = numeric_limits<streamsize>::max();
+
+template <typename T> T read_valid(bool (*valid)(T), string reprompt) {
+    T input;
+    cout << ">";
+    while (!(cin >> input) || !valid(input)) {
+        if (cin.eof()) {
+            throw exception();
+        }
+        cin.clear();
+        cin.ignore(max_size, '\n');
+        cout << reprompt << ">";
+    }
+    return input;
+}
+
+bool validVertex(int in) {
+    // bad magic numbers
+    return 0 <= in && in <= 53;
+}
+
 int main (int argc, char* argv[]) {
 
     unsigned seed = 12345; // Default seed
@@ -106,11 +129,12 @@ int main (int argc, char* argv[]) {
     }
 
     // Creating Board and Builders based on command line input
-    Board *b = nullptr;
+    unique_ptr<Board> b;
     unique_ptr<Goose> goose = make_unique<Goose>(nullptr);
     unique_ptr<Dice> loaded = make_unique<LoadedDice>(LoadedDice());
     unique_ptr<Dice> fair = make_unique<FairDice>(FairDice(seed));
     vector<Builder> builders;
+    unsigned curr_builder = 0;
 
     if (loadBoard && fullSave) {
 
@@ -123,11 +147,13 @@ int main (int argc, char* argv[]) {
         getline(file, yellow);
         getline(file, boardSave);
         getline(file, gooseLoc);
-        b = new LoadedBoard(boardSave);
-        addBuilder("Blue", loaded.get(), blue, builders, b);
-        addBuilder("Red", loaded.get(), red, builders, b);
-        addBuilder("Orange", loaded.get(), orange, builders, b);
-        addBuilder("Yellow", loaded.get(), yellow, builders, b);
+        // curr_builder should be different, find where that colour is in builders.
+        curr_builder = stoi(turn);
+        b = make_unique<LoadedBoard>(boardSave);
+        addBuilder("Blue", loaded.get(), blue, builders, &(*b));
+        addBuilder("Red", loaded.get(), red, builders, &(*b));
+        addBuilder("Orange", loaded.get(), orange, builders, &(*b));
+        addBuilder("Yellow", loaded.get(), yellow, builders, &(*b));
         goose->move(b->getTile(stoi(gooseLoc)));
 
     }  else if (loadBoard || !randomBoard) {
@@ -136,7 +162,7 @@ int main (int argc, char* argv[]) {
         ifstream file{fileName};
         string s;
         getline(file, s);
-        b = new LoadedBoard(s);
+        b = make_unique<LoadedBoard>(s);
         builders.emplace_back(Builder("Blue", loaded.get()));
         builders.emplace_back(Builder("Red", loaded.get()));
         builders.emplace_back(Builder("Orange", loaded.get()));
@@ -145,7 +171,7 @@ int main (int argc, char* argv[]) {
     } else {
 
         // Random Board;
-        b = new RandomBoard(seed);
+        b = make_unique<RandomBoard>(seed);
         builders.emplace_back(Builder("Blue", loaded.get()));
         builders.emplace_back(Builder("Red", loaded.get()));
         builders.emplace_back(Builder("Orange", loaded.get()));
@@ -155,5 +181,37 @@ int main (int argc, char* argv[]) {
 
     cout << b->getDesc() << endl;
 
+    
+    // Beginning of Game
+    try {
+        if (!fullSave) {
+
+            int bSize = builders.size();
+            bool firstRound = true;
+
+            for (int i = 0; i >= 0; firstRound ? ++i : --i) {
+
+                if (i == bSize) {
+                    --i;
+                    firstRound = false;
+                } 
+
+                cout << "Builder " << builders[i].getColour() << ", where do you want to build a basement?" << endl;
+                while (!builders[i].buildRes(&b->getVertex(read_valid<int>(&validVertex, "You cannot build here.\n")), true)) {
+                    cout << "You cannot build here." << endl;
+                }
+            }
+        }
+
+        while (true) {
+            cout << "Builder " << builders[curr_builder].getColour() << "'s turn." << endl;
+            curr_builder = (curr_builder + 1) % builders.size();
+            // Break at end of first turn FOR TESTING
+            if (curr_builder == builders.size() - 1) break;
+        }
+
+    } catch (...) {
+        // save then terminate program due to EOF.
+    }
 }
 

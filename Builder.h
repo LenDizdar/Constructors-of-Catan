@@ -18,7 +18,7 @@ class Builder : public Observer {
     int victoryPoints;
     Dice* die;
     public:
-        Builder(std::string colour, Dice* die);
+        Builder(std::string colour, Dice* die); // Default constructor
 
         void notify(Subject& whoNotified);
 

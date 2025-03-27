@@ -2,6 +2,7 @@
 #include "LoadedBoard.h"
 #include <iostream>
 #include <random>
+#include <sstream>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -12,6 +13,13 @@
 #include "Goose.h"
 
 using namespace std;
+
+void addBuilder(string colour, Dice* die, string fileInput, vector<Builder> &builders) {
+
+    builders.emplace_back(Builder("Blue", die));
+    istringstream iss{fileInput};
+
+}
 
 int main (int argc, char* argv[]) {
 
@@ -54,20 +62,24 @@ int main (int argc, char* argv[]) {
 
     // Creating Board and Builders based on command line input
     Board *b = nullptr;
-    Dice *loaded = new LoadedDice();
-    Dice *fair = new FairDice(seed);
-    cout << fair->roll() << endl;
+    unique_ptr<Dice> loaded = make_unique<Dice>(LoadedDice());
+    unique_ptr<Dice> fair = make_unique<Dice>(FairDice(seed));
+    vector<Builder> builders;
 
     if (loadBoard) {
 
         ifstream file{fileName};
         string s;
         for (int i = 0; i < 6; ++i) { getline(file, s); }
-        b = new LoadedBoard(fileName);
+        addBuilder("Blue", loaded.get(), s, builders);
 
     } else if (randomBoard) {
 
         b = new RandomBoard(seed);
+        builders.emplace_back(Builder("Blue", loaded.get()));
+        builders.emplace_back(Builder("Red", loaded.get()));
+        builders.emplace_back(Builder("Orange", loaded.get()));
+        builders.emplace_back(Builder("Yellow", loaded.get()));
 
     } else {
 
@@ -76,6 +88,10 @@ int main (int argc, char* argv[]) {
         string s;
         getline(file, s);
         b = new LoadedBoard(s);
+        builders.emplace_back(Builder("Blue", loaded.get()));
+        builders.emplace_back(Builder("Red", loaded.get()));
+        builders.emplace_back(Builder("Orange", loaded.get()));
+        builders.emplace_back(Builder("Yellow", loaded.get()));
 
     }
 

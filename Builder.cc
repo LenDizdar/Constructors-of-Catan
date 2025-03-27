@@ -84,6 +84,7 @@ bool Builder::buildRoad(Edge *e) {
                     e->getVertices()[i]->edges[j]->getRoad() &&
                     e->getVertices()[i]->edges[j]->getRoad()->getColour() == colour) {
                         canBuild = true;
+                        break;
                     }
             }
             if (canBuild) {

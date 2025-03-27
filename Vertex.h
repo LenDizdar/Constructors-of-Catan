@@ -29,6 +29,8 @@ class Vertex : public Observer {
         bool canBuildOn(Builder& builder);
         std::string getName() const;
         void setEdges(Edge* e1 = nullptr, Edge* e2 = nullptr, Edge* e3 = nullptr); // Setter
+                                                            // Also connects the vertex to
+                                                            // each edge passed
 };
 
 // istream& operator<<(istream& in, Vertex& vert);

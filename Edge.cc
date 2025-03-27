@@ -25,9 +25,16 @@ string Edge::getName() const {
 
 }
 
-void Edge::setVerticies(Vertex* v1, Vertex* v2) {
+void Edge::setVertex(Vertex* v1) {
 
-    vertices[0] = v1;
-    vertices[1] = v2;
+    if (vertices[0]) {
+
+        vertices[1] = v1;
+
+    } else {
+
+        vertices[0] = v1;
+
+    }
 
 }

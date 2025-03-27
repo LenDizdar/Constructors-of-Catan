@@ -75,4 +75,22 @@ void Vertex::setEdges(Edge* e1, Edge* e2, Edge* e3) {
     edges[1] = e2;
     edges[2] = e3;
 
+    if (e1) {
+
+        e1->setVertex(this);
+
+    }
+
+    if (e2) {
+
+        e2->setVertex(this);
+
+    }
+
+    if (e3) {
+
+        e3->setVertex(this);
+
+    }
+
 }

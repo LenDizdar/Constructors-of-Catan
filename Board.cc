@@ -315,6 +315,7 @@ void Board::connect() {
     tiles.at(18).attach(&vertices.at(53));
 
     // Setting vertex neighbour edges
+    // Verticies will then attach themselves to edges
     vertices.at(0).setEdges(&edges.at(0), &edges.at(1));
     vertices.at(1).setEdges(&edges.at(1), &edges.at(2));
     vertices.at(2).setEdges(&edges.at(3), &edges.at(5));

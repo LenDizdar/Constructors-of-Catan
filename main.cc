@@ -54,6 +54,9 @@ int main (int argc, char* argv[]) {
 
     // Creating Board and Builders based on command line input
     Board *b = nullptr;
+    Dice *loaded = new LoadedDice();
+    Dice *fair = new FairDice(seed);
+    cout << fair->roll() << endl;
 
     if (loadBoard) {
 

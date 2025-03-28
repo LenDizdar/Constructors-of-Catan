@@ -23,6 +23,7 @@ class Subject {
         void notifyObservers(); // Notify all attached observers
 
         void attach(Observer *obs); // Attach a new observer
+        void detach(Observer *obs); // Detach an observer (or do nothing)
 
         ResourceList* getResList() { return &(*resList); } // Getter
 };

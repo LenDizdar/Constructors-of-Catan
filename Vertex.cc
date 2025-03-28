@@ -6,6 +6,7 @@
 #include "Road.h"
 #include "Basement.h"
 #include "House.h"
+#include "ResourceList.h"
 using namespace std;
 
 Vertex::~Vertex() = default;
@@ -33,7 +34,7 @@ string Vertex::getName() const {
 
 void Vertex::notify(Subject& whoNotified) {
     if (residence) {
-        residence->setLastResource(whoNotified.getResList());
+        residence->setLastResource(*(whoNotified.getResList()) * residence->getNumResources());
         residence->notifyObservers();
     }
 }
@@ -61,10 +62,24 @@ bool Vertex::canBuildOn(Builder& builder) {
 
 void Vertex::improve() {
     if (residence) {
+        vector<Observer*> obs;
+        
         if (dynamic_cast<Basement*>(&(*residence)) != nullptr) {
+            for (auto& ob : obs) {
+                residence->detach(ob);
+            }
             residence = make_unique<House>(move(residence));
+            for (auto& ob : obs) {
+                residence->attach(ob);
+            }
         } else if (dynamic_cast<House*>(&(*residence)) != nullptr) {
+            for (auto& ob : obs) {
+                residence->detach(ob);
+            }
             residence = make_unique<Tower>(move(residence));
+            for (auto& ob : obs) {
+                residence->attach(ob);
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ void Builder::notify(Subject& whoNotified) {
 }
 
 std::string Builder::getStatusDesc() {
-    return colour + " has " + to_string(victoryPoints) + 
+    return colour + " has " + to_string(getVictoryPoints()) + " building points, " +
           to_string(hand.get(Resource::BRICK)) + " brick, " +
           to_string(hand.get(Resource::ENERGY)) + " energy, " +
           to_string(hand.get(Resource::GLASS)) + " glass, " +
@@ -44,9 +44,9 @@ std::string Builder::getStatusDesc() {
 }
 
 std::string Builder::getResidencesDesc() {
-    string toRet = colour + "has built:\n";
+    string toRet = colour + " has built:\n";
     for (auto& loc : buildingLocations) {
-        toRet += loc->getName() + " " + loc->getBuilding()->getDesc() + "\n";
+        toRet += to_string(loc->getIndex()) + " " + loc->getBuilding()->getDesc();
     }
     return toRet;
 }
@@ -142,13 +142,14 @@ bool Builder::buildRes(Vertex* v, bool gameStart) {
             }
         }
         v->residence = make_unique<Basement>(colour);
+        v->residence->attach(this);
         buildingLocations.emplace_back(v);
         return true;
-        
     } else {
         if (v && v->canBuildOn(*this) && hand >= Basement::getCost()) {
             hand -= Basement::getCost();
             v->residence = make_unique<Basement>(colour);
+            v->residence->attach(this);
             buildingLocations.emplace_back(v);
             return true;
         } else {

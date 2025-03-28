@@ -9,7 +9,7 @@ class Vertex;
 
 class Building : public Constructable, public Subject {
     // When notified by vertex this is called to update what is sent to the Builder
-    void setLastResource(ResourceList *oResList) { resList->set(*oResList); }
+    void setLastResource(ResourceList oResList) { resList->set(oResList); }
     friend class Vertex;
     public:
         // By default a building's resList is that of a PARK, all 0s

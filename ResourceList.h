@@ -28,4 +28,6 @@ class ResourceList {
         void operator+=(ResourceList other);
 };
 
+ResourceList operator*(ResourceList lhs, int rhs);
+
 #endif

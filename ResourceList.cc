@@ -106,3 +106,12 @@ void ResourceList::operator+=(ResourceList other) {
     heat += other.heat;
     wifi += other.wifi;
 }
+
+ResourceList operator*(ResourceList lhs, int rhs) {
+    lhs.set(Resource::BRICK, lhs.get(Resource::BRICK) * rhs);
+    lhs.set(Resource::ENERGY, lhs.get(Resource::ENERGY) * rhs);
+    lhs.set(Resource::GLASS, lhs.get(Resource::GLASS) * rhs);
+    lhs.set(Resource::HEAT, lhs.get(Resource::HEAT) * rhs);
+    lhs.set(Resource::WIFI, lhs.get(Resource::WIFI) * rhs);
+    return lhs;
+}

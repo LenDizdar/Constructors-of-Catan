@@ -26,6 +26,7 @@ class Board {
         Edge& getEdge(int index) { return edges.at(index); }
         Tile* getTile(int index) { return &tiles.at(index); }
         Tile* findGoose();
+        std::string saveOutput();
 };
 
 #endif

@@ -14,6 +14,7 @@ class Vertex;
 class Builder : public Observer {
     std::string colour;
     std::vector<Vertex*> buildingLocations;
+    std::vector<int> roadLocations;
     ResourceList hand;
     int victoryPoints;
     Dice* die;
@@ -51,6 +52,8 @@ class Builder : public Observer {
         void addOneResource(Resource toAdd);
 
         bool trade(Resource losing, Resource receiving, Builder* partner); // returns true if trade successful
+
+        std::string saveOutput(); // Returns the save information
 };
 
 #endif

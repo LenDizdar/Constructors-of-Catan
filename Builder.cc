@@ -7,11 +7,12 @@
 
 #include <random>
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
 Builder::Builder(string colour, Dice* die) : 
-    colour{colour}, buildingLocations{}, hand{0, 0, 0, 0, 0}, victoryPoints{0}, die{die} {}
+    colour{colour}, buildingLocations{}, roadLocations{}, hand{0, 0, 0, 0, 0}, victoryPoints{0}, die{die} {}
 
 void Builder::setDie(Dice* newDie) {
     die = newDie;
@@ -90,6 +91,7 @@ bool Builder::buildRoad(Edge *e, bool gameStart) {
         } else {
 
             e->road = make_unique<Road>(colour);
+            roadLocations.emplace_back(e->getIndex());
             return true;
 
         }
@@ -116,6 +118,7 @@ bool Builder::buildRoad(Edge *e, bool gameStart) {
                 if (hand >= Road::getCost()) {
                     hand -= Road::getCost();
                     e->road = make_unique<Road>(colour);
+                    roadLocations.emplace_back(e->getIndex());
                     return true;
                 } else {
                     return false;
@@ -139,12 +142,14 @@ bool Builder::buildRes(Vertex* v, bool gameStart) {
             }
         }
         v->residence = make_unique<Basement>(colour);
+        buildingLocations.emplace_back(v);
         return true;
         
     } else {
         if (v && v->canBuildOn(*this) && hand >= Basement::getCost()) {
             hand -= Basement::getCost();
             v->residence = make_unique<Basement>(colour);
+            buildingLocations.emplace_back(v);
             return true;
         } else {
             return false;
@@ -256,5 +261,35 @@ Resource Builder::loseRandomResource() {
 
     hand.change(possible.at(idx), -1);
     return possible.at(idx);
+
+}
+
+string Builder::saveOutput() {
+
+    ostringstream oss;
+    
+    for (int i = 0; i < 5; i ++) {
+
+        oss << hand.get(Resource(i)) << " ";
+
+    }
+
+    oss << "r ";
+
+    for (auto l : roadLocations) {
+
+        oss << l << " ";
+
+    }
+
+    oss << "h";
+
+    for (auto b : buildingLocations) {
+
+        oss << " " << b->getIndex() << " " << b->getBuilding()->getDesc();
+
+    }
+
+    return oss.str();
 
 }

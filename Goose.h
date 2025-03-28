@@ -8,6 +8,7 @@ class Goose {
     public:
         Goose(Tile *blocking) : blocking{blocking} { if (blocking) blocking->isBlocked = true; }
         void move(Tile* dest);
+        int getIndex() { return blocking ? blocking->getIndex() : 0; }
 };
 
 #endif

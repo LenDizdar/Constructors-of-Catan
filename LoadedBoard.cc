@@ -14,22 +14,22 @@ LoadedBoard::LoadedBoard(string saveInfo) : Board{} {
 
         switch(resource) {
             case 0:
-                tiles.emplace_back(Tile(Resource::BRICK, roll));
+                tiles.emplace_back(Tile(Resource::BRICK, roll, i));
                 break;
             case 1:
-                tiles.emplace_back(Tile(Resource::ENERGY, roll));
+                tiles.emplace_back(Tile(Resource::ENERGY, roll, i));
                 break;
             case 2:
-                tiles.emplace_back(Tile(Resource::GLASS, roll));
+                tiles.emplace_back(Tile(Resource::GLASS, roll, i));
                 break;
             case 3:
-                tiles.emplace_back(Tile(Resource::HEAT, roll));
+                tiles.emplace_back(Tile(Resource::HEAT, roll, i));
                 break;
             case 4:
-                tiles.emplace_back(Tile(Resource::WIFI, roll));
+                tiles.emplace_back(Tile(Resource::WIFI, roll, i));
                 break;
             case 5:
-                tiles.emplace_back(Tile(0,0,0,0,0,0));
+                tiles.emplace_back(Tile(0,0,0,0,0,7, i));
                 break;
         }
 

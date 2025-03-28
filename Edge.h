@@ -20,6 +20,7 @@ class Edge {
         const Road* getRoad() { return road ? &(*road) : nullptr; }
         const Vertex** getVertices() { return const_cast<const Vertex**>(vertices); }
         std::string getName() const;
+        int getIndex() const { return index; }
         void setVertex(Vertex* v1); // Adds a neighbouring vertex to the list
 };
 

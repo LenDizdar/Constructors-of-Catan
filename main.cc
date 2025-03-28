@@ -315,6 +315,31 @@ int main (int argc, char* argv[]) {
 
     } catch (...) {
         // save then terminate program due to EOF.
+        ofstream file{"backup.sv"};
+
+        switch (turn) {
+            case 0:
+                file << "Blue" << endl;
+                break;
+            case 1:
+                file << "Red" << endl;
+                break;
+            case 2:
+                file << "Orange" << endl;
+                break;
+            case 3:
+                file << "Yellow" << endl;
+                break;
+        }
+        
+        for (auto builder : builders) {
+
+            file << builder.saveOutput() << endl;
+
+        }
+
+        file << b->saveOutput() << endl;
+        file << goose->getIndex() << endl;
     }
 }
 

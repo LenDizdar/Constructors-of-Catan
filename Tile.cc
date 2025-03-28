@@ -2,8 +2,8 @@
 #include <sstream>
 // Whoever  creates a Tile must attach its observers (will be Board)
 // Goes for both contructors
-Tile::Tile(int brick, int energy, int glass, int heat, int wifi, int rollNum) : 
-    Subject{brick, energy, glass, heat, wifi}, rollNum{rollNum} {
+Tile::Tile(int brick, int energy, int glass, int heat, int wifi, int rollNum, int index) : 
+    Subject{brick, energy, glass, heat, wifi}, rollNum{rollNum}, index{index} {
         // only a park will be initialized without resources
         if (!brick && !energy && !glass && !heat && !wifi) {
             isBlocked = true;
@@ -13,7 +13,8 @@ Tile::Tile(int brick, int energy, int glass, int heat, int wifi, int rollNum) :
 }
 
 
-Tile::Tile(Resource r, int rollNum) : Subject{r}, rollNum{rollNum}, isBlocked{false} {
+Tile::Tile(Resource r, int rollNum, int index) : 
+    Subject{r}, rollNum{rollNum}, isBlocked{false}, index{index} {
     if (r == Resource::PARK) {
         isBlocked = true;
     }
@@ -59,6 +60,25 @@ std::string Tile::getResourceName() const {
         return " WIFI ";
     }
     return " PARK ";
+}
+
+int Tile::getResourceInt() const {
+    if (resList->get(Resource::BRICK)) {
+        return 0;
+    }
+    if (resList->get(Resource::ENERGY)) {
+        return 1;
+    }
+    if (resList->get(Resource::GLASS)) {
+        return 2;
+    }
+    if (resList->get(Resource::HEAT)) {
+        return 3;
+    }
+    if (resList->get(Resource::WIFI)) {
+        return 4;
+    }
+    return 5;
 }
 
 // Exists so when a goose is moved we can find who can be stolen from.

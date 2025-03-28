@@ -20,6 +20,18 @@ Tile* Board::findGoose() {
     return nullptr;
 }
 
+string Board::saveOutput() {
+
+    ostringstream oss;
+    for (auto& tile : tiles) {
+
+        oss << tile.getResourceInt() << " " << tile.getRollNum() << " ";
+        
+    }
+    return oss.str();
+
+}
+
 string Board::getLineTop(int left, int edge, int right) {
 
     ostringstream oss;

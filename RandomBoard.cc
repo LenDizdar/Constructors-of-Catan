@@ -29,25 +29,25 @@ RandomBoard::RandomBoard(unsigned seed) : Board{} {
 
             switch(resourceType) {
                 case 0:
-                    tiles.emplace_back(Tile(Resource::BRICK, rolls.at(i)));
+                    tiles.emplace_back(Tile(Resource::BRICK, rolls.at(i), i));
                     break;
                 case 1:
-                    tiles.emplace_back(Tile(Resource::ENERGY, rolls.at(i)));
+                    tiles.emplace_back(Tile(Resource::ENERGY, rolls.at(i), i));
                     break;
                 case 2:
-                    tiles.emplace_back(Tile(Resource::GLASS, rolls.at(i)));
+                    tiles.emplace_back(Tile(Resource::GLASS, rolls.at(i), i));
                     break;
                 case 3:
-                    tiles.emplace_back(Tile(Resource::HEAT, rolls.at(i)));
+                    tiles.emplace_back(Tile(Resource::HEAT, rolls.at(i), i));
                     break;
                 case 4:
-                    tiles.emplace_back(Tile(Resource::WIFI, rolls.at(i)));
+                    tiles.emplace_back(Tile(Resource::WIFI, rolls.at(i), i));
                     break;
             }
 
         } else {
 
-            tiles.emplace_back(Tile(0,0,0,0,0,0));
+            tiles.emplace_back(Tile(0,0,0,0,0,7,i));
 
         }
 

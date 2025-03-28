@@ -19,7 +19,7 @@ using namespace std;
 
 void addBuilder(string colour, Dice* die, string fileInput, vector<Builder> &builders, Board *b, int& startingBuildings) {
 
-    builders.emplace_back(Builder(colour, die));
+    builders.emplace_back(colour, die);
     istringstream iss{fileInput};
 
     // Adding Resources
@@ -290,7 +290,7 @@ int main (int argc, char* argv[]) {
 
                     bool resGained = false;
                     for (int i = 0; i < static_cast<int>(builders.size()); ++i) {
-                        if (builders[i].getHand() != prevResources[i]) {
+                        if (builders.at(i).getHand() != prevResources.at(i)) {
                             resGained = true;
                             cout << "Builder " << builders[i].getColour() << " gained:" << endl;
                             if (builders[i].getHand().get(Resource::BRICK) - prevResources[i].get(Resource::BRICK)) {

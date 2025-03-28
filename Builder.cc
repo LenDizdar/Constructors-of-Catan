@@ -46,7 +46,7 @@ std::string Builder::getStatusDesc() {
 std::string Builder::getResidencesDesc() {
     string toRet = colour + " has built:\n";
     for (auto& loc : buildingLocations) {
-        toRet += to_string(loc->getIndex()) + " " + loc->getBuilding()->getDesc();
+        toRet += to_string(loc->getIndex()) + " " + loc->getBuilding()->getDesc() + "\n";
     }
     return toRet;
 }

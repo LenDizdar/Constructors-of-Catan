@@ -199,7 +199,7 @@ int main (int argc, char* argv[]) {
                 break;
             }
         }
-        goose->move(b->getTile(stoi(gooseLoc)));
+        if (stoi(gooseLoc) != -1) (goose->move(b->getTile(stoi(gooseLoc))));
 
     }  else if (loadBoard || !randomBoard) {
 
@@ -290,7 +290,7 @@ int main (int argc, char* argv[]) {
                     cout << curr_builder.getStatusDesc() << endl;
                     continue;
                 } else if (builderAction == "residences") {
-                    cout << curr_builder.getResidencesDesc() << endl;
+                    cout << curr_builder.getResidencesDesc();
                     continue;
                 } else if (builderAction == "build-road") {
                     int edgeNum ;
@@ -363,7 +363,9 @@ int main (int argc, char* argv[]) {
                                         else if (take == "heat") takeRes = Resource::HEAT;
                                         else if (take == "wifi") takeRes = Resource::WIFI;
                                         else takeRes = Resource::PARK;
-                                        curr_builder.trade(giveRes, takeRes, &builder);
+                                        if (!curr_builder.trade(giveRes, takeRes, &builder)) {
+                                            cout << "You do not have enough resources." << endl;
+                                        }
                                     } else {
                                         cout << "Trade not accepted." << endl;
                                     }

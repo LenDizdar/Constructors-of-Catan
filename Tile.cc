@@ -3,14 +3,7 @@
 // Whoever  creates a Tile must attach its observers (will be Board)
 // Goes for both contructors
 Tile::Tile(int brick, int energy, int glass, int heat, int wifi, int rollNum, int index) : 
-    Subject{brick, energy, glass, heat, wifi}, rollNum{rollNum}, index{index} {
-        // only a park will be initialized without resources
-        if (!brick && !energy && !glass && !heat && !wifi) {
-            isBlocked = true;
-        } else {
-            isBlocked = false;
-        }
-}
+    Subject{brick, energy, glass, heat, wifi}, rollNum{rollNum}, isBlocked{false}, index{index} {}
 
 
 Tile::Tile(Resource r, int rollNum, int index) : 

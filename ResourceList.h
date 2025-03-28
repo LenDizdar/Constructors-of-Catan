@@ -26,6 +26,7 @@ class ResourceList {
         bool operator>=(ResourceList other);
         void operator-=(ResourceList other);
         void operator+=(ResourceList other);
+        bool operator!=(ResourceList other);
 };
 
 ResourceList operator*(ResourceList lhs, int rhs);

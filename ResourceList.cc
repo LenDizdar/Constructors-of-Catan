@@ -107,6 +107,14 @@ void ResourceList::operator+=(ResourceList other) {
     wifi += other.wifi;
 }
 
+bool ResourceList::operator!=(ResourceList other) {
+    return brick != other.brick ||
+           energy != other.energy ||
+           glass != other.glass ||
+           heat != other.heat ||
+           wifi != other.wifi;
+}
+
 ResourceList operator*(ResourceList lhs, int rhs) {
     lhs.set(Resource::BRICK, lhs.get(Resource::BRICK) * rhs);
     lhs.set(Resource::ENERGY, lhs.get(Resource::ENERGY) * rhs);

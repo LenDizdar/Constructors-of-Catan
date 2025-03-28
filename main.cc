@@ -17,7 +17,7 @@
 
 using namespace std;
 
-void addBuilder(string colour, Dice* die, string fileInput, vector<Builder> &builders, Board *b) {
+void addBuilder(string colour, Dice* die, string fileInput, vector<Builder> &builders, Board *b, int& startingBuildings) {
 
     builders.emplace_back(Builder(colour, die));
     istringstream iss{fileInput};
@@ -49,6 +49,8 @@ void addBuilder(string colour, Dice* die, string fileInput, vector<Builder> &bui
 
     // Adding buildings
     while (iss >> index) {
+
+        ++startingBuildings;
 
         string type;
         iss >> type;
@@ -137,6 +139,7 @@ int main (int argc, char* argv[]) {
     bool loadBoard = false;
     bool randomBoard = false;
     bool fullSave = false;
+    int startingBuildings = 0;
 
     // Handling command line arguments
     for (int i = 1; i < argc; i++) {
@@ -189,10 +192,10 @@ int main (int argc, char* argv[]) {
         getline(file, boardSave);
         getline(file, gooseLoc);
         b = make_unique<LoadedBoard>(boardSave);
-        addBuilder("Blue", loaded.get(), blue, builders, &(*b));
-        addBuilder("Red", loaded.get(), red, builders, &(*b));
-        addBuilder("Orange", loaded.get(), orange, builders, &(*b));
-        addBuilder("Yellow", loaded.get(), yellow, builders, &(*b));
+        addBuilder("Blue", loaded.get(), blue, builders, &(*b), startingBuildings);
+        addBuilder("Red", loaded.get(), red, builders, &(*b), startingBuildings);
+        addBuilder("Orange", loaded.get(), orange, builders, &(*b), startingBuildings);
+        addBuilder("Yellow", loaded.get(), yellow, builders, &(*b), startingBuildings);
         for (int i = 0; i < static_cast<int>(builders.size()); ++i) {
             if (builders[i].getColour() == turn_str) {
                 turn = i;
@@ -212,8 +215,6 @@ int main (int argc, char* argv[]) {
         builders.emplace_back(Builder("Red", loaded.get()));
         builders.emplace_back(Builder("Orange", loaded.get()));
         builders.emplace_back(Builder("Yellow", loaded.get()));
-
-        // How do you know where the goose is???
         
     } else {
 
@@ -224,20 +225,24 @@ int main (int argc, char* argv[]) {
         builders.emplace_back(Builder("Orange", loaded.get()));
         builders.emplace_back(Builder("Yellow", loaded.get()));
 
-        // Must put the goose somewhere.
-
     }
 
     cout << b->getDesc() << endl;
-
+    bool gameBegun = true;
     try {
         // Beginning of Game phase
-        if (!fullSave) {
-
+        
+        if (startingBuildings < static_cast<int>(builders.size()) * 2) {
+            gameBegun = false;
             int bSize = builders.size();
             bool firstRound = true;
 
-            for (int i = 0; i >= 0; firstRound ? ++i : --i) {
+            if (startingBuildings >= bSize) {
+                startingBuildings = 2 * bSize - (startingBuildings) - 1;
+                firstRound = false;
+            }
+
+            for (int i = startingBuildings; i >= 0; firstRound ? ++i : --i) {
 
                 if (i == bSize) {
                     --i;
@@ -251,6 +256,7 @@ int main (int argc, char* argv[]) {
             }
 
             cout << b->getDesc() << endl;
+            gameBegun = true;
         } 
         // ~Beginning of Game phase
         
@@ -260,6 +266,12 @@ int main (int argc, char* argv[]) {
             cout << "Builder " << curr_builder.getColour() << "'s turn." << endl;
             
             // Beginning of turn phase
+
+            vector<ResourceList> prevResources;
+            for (auto& builder : builders) {
+                prevResources.emplace_back(builder.getHand());
+            }
+
             while (true) {
                 string dieAction = read_valid<string>(&validTurnBegin, "Invalid command.\nTry 'load', 'fair', or 'roll'.\n");
                 if (dieAction == "load") {
@@ -272,10 +284,40 @@ int main (int argc, char* argv[]) {
                     continue;
                 } else {
                     // roll!
-                    b->rolled(curr_builder.roll());
+                    int theRoll = curr_builder.roll();
+                    b->rolled(theRoll);
+                    cout << "Rolled a " << theRoll << "!" << endl;
+
+                    bool resGained = false;
+                    for (int i = 0; i < static_cast<int>(builders.size()); ++i) {
+                        if (builders[i].getHand() != prevResources[i]) {
+                            resGained = true;
+                            cout << "Builder " << builders[i].getColour() << " gained:" << endl;
+                            if (builders[i].getHand().get(Resource::BRICK) - prevResources[i].get(Resource::BRICK)) {
+                                cout << builders[i].getHand().get(Resource::BRICK) - prevResources[i].get(Resource::BRICK) << " brick" << endl;
+                            }
+                            if (builders[i].getHand().get(Resource::ENERGY) - prevResources[i].get(Resource::ENERGY)) {
+                                cout << builders[i].getHand().get(Resource::ENERGY) - prevResources[i].get(Resource::ENERGY) << " energy" << endl;
+                            }
+                            if (builders[i].getHand().get(Resource::GLASS) - prevResources[i].get(Resource::GLASS)) {
+                                cout << builders[i].getHand().get(Resource::GLASS) - prevResources[i].get(Resource::GLASS) << " glass" << endl;
+                            }
+                            if (builders[i].getHand().get(Resource::HEAT) - prevResources[i].get(Resource::HEAT)) {
+                                cout << builders[i].getHand().get(Resource::HEAT) - prevResources[i].get(Resource::HEAT) << " heat" << endl;
+                            }
+                            if (builders[i].getHand().get(Resource::WIFI) - prevResources[i].get(Resource::WIFI)) {
+                                cout << builders[i].getHand().get(Resource::WIFI) - prevResources[i].get(Resource::WIFI) << " WiFi" << endl;
+                            }
+                        }
+                    }
+                    if (!resGained) {
+                        cout << "No builders gained resources." << endl;
+                    }
+
                     break;
                 }
                 cout << "Invalid command?\nTry 'load', 'fair', or 'roll'.\n";
+                
             }
             // ~Beginning of turn phase
 
@@ -385,7 +427,10 @@ int main (int argc, char* argv[]) {
                     string fname;
                     if (cin >> fname) {
                         ofstream file{fname};
-                        file << builders[(turn + 1) % builders.size()].getColour() << endl;
+                        if (gameBegun) {
+                            turn = (turn + 1) % builders.size();
+                        }
+                        file << builders[turn].getColour() << endl;
         
                         for (auto builder : builders) {
 
@@ -420,21 +465,11 @@ int main (int argc, char* argv[]) {
         // save then terminate program due to EOF.
         ofstream file{"backup.sv"};
 
-        /*switch (turn) {
-            case 0:
-                file << "Blue" << endl;
-                break;
-            case 1:
-                file << "Red" << endl;
-                break;
-            case 2:
-                file << "Orange" << endl;
-                break;
-            case 3:
-                file << "Yellow" << endl;
-                break;
-        }*/
-       file << builders[(turn + 1) % builders.size()].getColour() << endl;
+        if (gameBegun) {
+            turn = (turn + 1) % builders.size();
+        }
+
+        file << builders[turn].getColour() << endl;
         
         for (auto builder : builders) {
 

@@ -285,7 +285,7 @@ string Builder::saveOutput() {
 
     oss << "h";
 
-    for (auto b : buildingLocations) {
+    for (auto& b : buildingLocations) {
 
         oss << " " << b->getIndex() << " " << b->getBuilding()->getDesc();
 

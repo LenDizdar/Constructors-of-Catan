@@ -1,6 +1,7 @@
 #include "Subject.h"
 //import observer;
 #include <vector>
+#include <iostream>
 
 Subject::Subject(int brick, int energy, int glass, int heat, int wifi) :
     observers{},
@@ -14,7 +15,7 @@ Subject::Subject(Resource r) : observers{}, resList{std::make_unique<ResourceLis
 }
 
 void Subject::notifyObservers() {
-    for (auto& obs : observers) {
+    for (auto &obs : observers) {
         obs->notify(*this);
     }
 }

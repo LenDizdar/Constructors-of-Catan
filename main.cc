@@ -178,6 +178,7 @@ int main (int argc, char* argv[]) {
     unique_ptr<Dice> loaded = make_unique<LoadedDice>(LoadedDice());
     unique_ptr<Dice> fair = make_unique<FairDice>(FairDice(seed));
     vector<Builder> builders;
+    builders.reserve(4);
     unsigned turn = 0;
 
     if (loadBoard && fullSave) {
@@ -432,7 +433,7 @@ int main (int argc, char* argv[]) {
                         }
                         file << builders[turn].getColour() << endl;
         
-                        for (auto builder : builders) {
+                        for (auto& builder : builders) {
 
                         file << builder.saveOutput() << endl;
 
@@ -471,7 +472,7 @@ int main (int argc, char* argv[]) {
 
         file << builders[turn].getColour() << endl;
         
-        for (auto builder : builders) {
+        for (auto& builder : builders) {
 
             file << builder.saveOutput() << endl;
 

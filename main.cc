@@ -392,6 +392,7 @@ int main (int argc, char* argv[]) {
 
             // During the turn phase
             while (true) {
+
                 string builderAction = read_valid<string>(&validTurnCmd, "Invalid command.\nTry 'help' for a list of valid commands.\n");
 
                 if (builderAction == "board") {
@@ -524,8 +525,30 @@ int main (int argc, char* argv[]) {
                 cout << "Invalid command.\nTry 'help' for a list of valid commands.\n";
             }
             // ~During the turn phase
+
+            // Chcecking for winner
+            bool isWinner = false;
+            string winnerColour;
+            for (auto &builder : builders) {
+
+                if (builder.getVictoryPoints() >= 10) {
+
+                    isWinner = true;
+                    winnerColour = builder.getColour();
+
+                }
+
+            }
+
+            if (isWinner) {
+
+                cout << "Builder " << winnerColour << " has gotten 10 victory points, they win! Congratulations!" << endl;
+                cout << "Would you like to play again?" << endl;
+                break;
+
+            }
             
-            
+            // Next turn
             turn = (turn + 1) % builders.size();
         }
         // ~Game loop

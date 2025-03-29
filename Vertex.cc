@@ -68,6 +68,7 @@ void Vertex::improve() {
         if (dynamic_cast<Basement*>(&(*residence)) != nullptr) {
             for (auto& ob : residence->getObservers()) {
                 obs.push_back(ob);
+                residence->detach(ob);
             }
             residence = make_unique<House>(move(residence));
             for (auto& ob : obs) {
@@ -76,6 +77,7 @@ void Vertex::improve() {
         } else if (dynamic_cast<House*>(&(*residence)) != nullptr) {
             for (auto& ob : residence->getObservers()) {
                 obs.push_back(ob);
+                residence->detach(ob);
             }
             residence = make_unique<Tower>(move(residence));
             for (auto& ob : obs) {

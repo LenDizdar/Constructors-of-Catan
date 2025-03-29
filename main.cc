@@ -14,6 +14,7 @@
 #include "Goose.h"
 #include <stdexcept>
 #include <limits>
+#include "ResourceList.h"
 
 using namespace std;
 
@@ -130,6 +131,10 @@ bool validTurnCmd(string str) {
 
 bool validEdge(int in) {
     return 0 <= in && in <= 71;
+}
+
+bool validTile(int in) {
+    return 0 <= in && in <= 18;
 }
 
 int main (int argc, char* argv[]) {
@@ -286,33 +291,78 @@ int main (int argc, char* argv[]) {
                 } else {
                     // roll!
                     int theRoll = curr_builder.roll();
-                    b->rolled(theRoll);
                     cout << "Rolled a " << theRoll << "!" << endl;
-
-                    bool resGained = false;
-                    for (int i = 0; i < static_cast<int>(builders.size()); ++i) {
-                        if (builders.at(i).getHand() != prevResources.at(i)) {
-                            resGained = true;
-                            cout << "Builder " << builders[i].getColour() << " gained:" << endl;
-                            if (builders[i].getHand().get(Resource::BRICK) - prevResources[i].get(Resource::BRICK)) {
-                                cout << builders[i].getHand().get(Resource::BRICK) - prevResources[i].get(Resource::BRICK) << " brick" << endl;
-                            }
-                            if (builders[i].getHand().get(Resource::ENERGY) - prevResources[i].get(Resource::ENERGY)) {
-                                cout << builders[i].getHand().get(Resource::ENERGY) - prevResources[i].get(Resource::ENERGY) << " energy" << endl;
-                            }
-                            if (builders[i].getHand().get(Resource::GLASS) - prevResources[i].get(Resource::GLASS)) {
-                                cout << builders[i].getHand().get(Resource::GLASS) - prevResources[i].get(Resource::GLASS) << " glass" << endl;
-                            }
-                            if (builders[i].getHand().get(Resource::HEAT) - prevResources[i].get(Resource::HEAT)) {
-                                cout << builders[i].getHand().get(Resource::HEAT) - prevResources[i].get(Resource::HEAT) << " heat" << endl;
-                            }
-                            if (builders[i].getHand().get(Resource::WIFI) - prevResources[i].get(Resource::WIFI)) {
-                                cout << builders[i].getHand().get(Resource::WIFI) - prevResources[i].get(Resource::WIFI) << " WiFi" << endl;
+                    if (theRoll == 7) {
+                        // Goose!
+                        for (auto& builder : builders) {
+                            builder.halfResources();
+                        }
+                        cout << "Choose where to place the GEESE." << endl;
+                        while (true) {
+                            int moveTile = read_valid<int>(&validTile, "Please choose a valid tile for placing the GEESE.");
+                            if (moveTile == goose->getIndex()) {
+                                cout << "The GEESE are already at that tile." << endl << "Please choose a valid tile for placing the GEESE." << endl;
+                            } else {
+                                goose->move(b->getTile(moveTile));
+                                std::vector<Builder*> possibleVictims = b->getTile(moveTile)->getBuildersOnTile();
+                                if (possibleVictims.size() > 0) {
+                                    cout << "Builder " << curr_builder.getColour() << " can choose to steal from ";
+                                    for (int i = 0; i < static_cast<int>(possibleVictims.size()); ++i) {
+                                        cout << possibleVictims.at(i)->getColour();
+                                        if ( i != static_cast<int>(possibleVictims.size()) - 1) {
+                                            cout << ", ";
+                                        }
+                                    }
+                                    cout << "." << endl << "Choose a builder to steal from." << endl;
+                                    while (true) {
+                                        string choice;
+                                        if (read_one_valid<string>(&retTrue, choice)) {
+                                            for (auto& victim : possibleVictims) {
+                                                if (victim->getColour() == choice) {
+                                                    Resource to_gain = victim->loseRandomResource();
+                                                    if (to_gain != Resource::PARK) {
+                                                        curr_builder.getHand().change(to_gain, 1);
+                                                    }
+                                                    cout << "Builder " << curr_builder.getColour() << " steals " << res_to_str(to_gain) << " from builder " << victim->getColour() << "." << endl;
+                                                    break; 
+                                                }
+                                            }
+                                        }
+                                        cout << "Choose a valid builder to steal from." << endl;
+                                    }
+                                } else {
+                                    cout << "Builder " << curr_builder.getColour() << " has no builders to steal from." << endl;
+                                }
+                                break;
                             }
                         }
-                    }
-                    if (!resGained) {
-                        cout << "No builders gained resources." << endl;
+                    } else {
+                        b->rolled(theRoll);
+                        bool resGained = false;
+                        for (int i = 0; i < static_cast<int>(builders.size()); ++i) {
+                            if (builders.at(i).getHand() != prevResources.at(i)) {
+                                resGained = true;
+                                cout << "Builder " << builders[i].getColour() << " gained:" << endl;
+                                if (builders[i].getHand().get(Resource::BRICK) - prevResources[i].get(Resource::BRICK)) {
+                                    cout << builders[i].getHand().get(Resource::BRICK) - prevResources[i].get(Resource::BRICK) << " brick" << endl;
+                                }
+                                if (builders[i].getHand().get(Resource::ENERGY) - prevResources[i].get(Resource::ENERGY)) {
+                                    cout << builders[i].getHand().get(Resource::ENERGY) - prevResources[i].get(Resource::ENERGY) << " energy" << endl;
+                                }
+                                if (builders[i].getHand().get(Resource::GLASS) - prevResources[i].get(Resource::GLASS)) {
+                                    cout << builders[i].getHand().get(Resource::GLASS) - prevResources[i].get(Resource::GLASS) << " glass" << endl;
+                                }
+                                if (builders[i].getHand().get(Resource::HEAT) - prevResources[i].get(Resource::HEAT)) {
+                                    cout << builders[i].getHand().get(Resource::HEAT) - prevResources[i].get(Resource::HEAT) << " heat" << endl;
+                                }
+                                if (builders[i].getHand().get(Resource::WIFI) - prevResources[i].get(Resource::WIFI)) {
+                                    cout << builders[i].getHand().get(Resource::WIFI) - prevResources[i].get(Resource::WIFI) << " WiFi" << endl;
+                                }
+                            }
+                        }
+                        if (!resGained) {
+                            cout << "No builders gained resources." << endl;
+                        }
                     }
 
                     break;

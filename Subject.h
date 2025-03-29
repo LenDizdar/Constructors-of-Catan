@@ -10,11 +10,13 @@ class Subject {
     std::vector<Observer*> observers;
     protected:
         std::unique_ptr<ResourceList> resList;
-        std::vector<Observer*>getObservers() { return observers; }
+        
     public:
         Subject(int brick, int energy, int glass, int heat, int wifi); //Constructor
                                             // initializes the resource list with
                                             // the corresponding ints
+
+        std::vector<Observer*>getObservers() { return observers; }
 
         Subject(Resource r); // Constructor
                              // initializes resource list with a single resource

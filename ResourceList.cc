@@ -123,3 +123,27 @@ ResourceList operator*(ResourceList lhs, int rhs) {
     lhs.set(Resource::WIFI, lhs.get(Resource::WIFI) * rhs);
     return lhs;
 }
+
+std::string res_to_str(Resource res) {
+    switch (res) {
+        case Resource::BRICK:
+            return "brick";
+            break;
+        case Resource::ENERGY:
+            return "energy";
+            break;
+        case Resource::GLASS:
+            return "glass";
+            break;
+        case Resource::HEAT:
+            return "heat";
+            break;
+        case Resource::WIFI:
+            return "WiFi";
+            break;
+        case Resource::PARK:
+            return "nothing";
+            break;
+    }
+    return "error";
+}

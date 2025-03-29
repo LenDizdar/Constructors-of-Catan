@@ -1,5 +1,6 @@
 #include "Tile.h"
 #include <sstream>
+#include "Vertex.h"
 // Whoever  creates a Tile must attach its observers (will be Board)
 // Goes for both contructors
 Tile::Tile(int brick, int energy, int glass, int heat, int wifi, int rollNum, int index) : 
@@ -73,9 +74,12 @@ int Tile::getResourceInt() const {
 std::vector<Builder*> Tile::getBuildersOnTile() {
     std::vector<Builder*> toRet;
     for (auto& obs : getObservers()) {
-        Builder* curr = dynamic_cast<Builder*>(obs);
-        if (curr) {
-            toRet.emplace_back(curr);
+        Vertex* curr = dynamic_cast<Vertex*>(obs);
+        if (curr && curr->getBuilding()) {
+            Builder* toPlace = dynamic_cast<Builder*>(curr->getBuilding()->getObservers()[0]);
+            if (toPlace) {
+                toRet.emplace_back(toPlace);
+            }
         }
     }
     return toRet;

@@ -1,5 +1,8 @@
 #ifndef RESOURCE_LIST_H
 #define RESOURCE_LIST_H
+
+#include <string>
+
 enum Resource {
     BRICK,
     ENERGY,
@@ -30,5 +33,6 @@ class ResourceList {
 };
 
 ResourceList operator*(ResourceList lhs, int rhs);
+std::string res_to_str(Resource res);
 
 #endif

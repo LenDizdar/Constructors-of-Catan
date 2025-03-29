@@ -303,9 +303,21 @@ int main (int argc, char* argv[]) {
                             if (moveTile == goose->getIndex()) {
                                 cout << "The GEESE are already at that tile." << endl << "Please choose a valid tile for placing the GEESE." << endl;
                             } else {
+
                                 goose->move(b->getTile(moveTile));
+                                
                                 std::vector<Builder*> possibleVictims = b->getTile(moveTile)->getBuildersOnTile();
+
+                                // Check if stealing from self
+                                for (int i = 0; i < static_cast<int>(possibleVictims.size()); ++i) {
+                                    if (possibleVictims.at(i) == &curr_builder) {
+                                        possibleVictims.erase(possibleVictims.begin() + i);
+                                    }
+                                }
+
+                                // If there is someone to steal from, steal
                                 if (possibleVictims.size() > 0) {
+
                                     cout << "Builder " << curr_builder.getColour() << " can choose to steal from ";
                                     for (int i = 0; i < static_cast<int>(possibleVictims.size()); ++i) {
                                         cout << possibleVictims.at(i)->getColour();
@@ -313,12 +325,15 @@ int main (int argc, char* argv[]) {
                                             cout << ", ";
                                         }
                                     }
+
                                     cout << "." << endl << "Choose a builder to steal from." << endl;
                                     while (true) {
                                         string choice;
+                                        bool goodChoice = false;
                                         if (read_one_valid<string>(&retTrue, choice)) {
                                             for (auto& victim : possibleVictims) {
                                                 if (victim->getColour() == choice) {
+                                                    goodChoice = true;
                                                     Resource to_gain = victim->loseRandomResource();
                                                     if (to_gain != Resource::PARK) {
                                                         curr_builder.getHand().change(to_gain, 1);
@@ -326,6 +341,9 @@ int main (int argc, char* argv[]) {
                                                     cout << "Builder " << curr_builder.getColour() << " steals " << res_to_str(to_gain) << " from builder " << victim->getColour() << "." << endl;
                                                     break; 
                                                 }
+                                            }
+                                            if (goodChoice) {
+                                                break;
                                             }
                                         }
                                         cout << "Choose a valid builder to steal from." << endl;

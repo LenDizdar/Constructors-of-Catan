@@ -62,19 +62,20 @@ bool Vertex::canBuildOn(Builder& builder) {
 
 void Vertex::improve() {
     if (residence) {
+
         vector<Observer*> obs;
         
         if (dynamic_cast<Basement*>(&(*residence)) != nullptr) {
-            for (auto& ob : obs) {
-                residence->detach(ob);
+            for (auto& ob : residence->getObservers()) {
+                obs.push_back(ob);
             }
             residence = make_unique<House>(move(residence));
             for (auto& ob : obs) {
                 residence->attach(ob);
             }
         } else if (dynamic_cast<House*>(&(*residence)) != nullptr) {
-            for (auto& ob : obs) {
-                residence->detach(ob);
+            for (auto& ob : residence->getObservers()) {
+                obs.push_back(ob);
             }
             residence = make_unique<Tower>(move(residence));
             for (auto& ob : obs) {

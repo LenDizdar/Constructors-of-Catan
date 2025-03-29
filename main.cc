@@ -435,11 +435,18 @@ int main (int argc, char* argv[]) {
                 } else if (builderAction == "improve") {
                     int vertNum;
                     if (read_one_valid<int>(&validVertex, vertNum)) {
+                        try {
+                            b->getVertex(vertNum).getBuilding()->getImproveResources();
+                        } catch (...) {
+                            cout << "Cannot improve a Tower." << endl;
+                            continue;
+                        }
                         if (curr_builder.improve(&b->getVertex(vertNum), false)) {
                             break;
                         } else if (!b->getVertex(vertNum).getBuilding()) {
                             cout << "You cannot build here." << endl;
                         } else if (!(curr_builder.getHand() >= b->getVertex(vertNum).getBuilding()->getImproveResources())) {
+                            // NOTE: GETIMPROVERESOURCES THROWS AN ERROR IF IMPROVING TO
                             cout << "You do not have enough resources." << endl;
                         } else {
                             cout << "You cannot build here." << endl;

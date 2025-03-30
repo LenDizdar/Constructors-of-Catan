@@ -2,6 +2,6 @@
 
 void Goose::move(Tile* dest) {
     if (blocking) { blocking->isBlocked = false; }
-    dest->isBlocked = true;
+    if (dest) { dest->isBlocked = true; }
     blocking = dest;
 }

@@ -175,9 +175,9 @@ int main (int argc, char* argv[]) {
 
         }
 
-    }
+    }    
 
-    // Creating Board and Builders based on command line input
+    default_random_engine rand{seed};
     unique_ptr<Board> b;
     unique_ptr<Goose> goose = make_unique<Goose>(nullptr);
     unique_ptr<Dice> loaded = make_unique<LoadedDice>(LoadedDice());
@@ -185,380 +185,407 @@ int main (int argc, char* argv[]) {
     vector<Builder> builders;
     builders.reserve(4);
     unsigned turn = 0;
-
-    if (loadBoard && fullSave) {
-
-        ifstream file{fileName};
-        string turn_str, blue, red, orange, yellow, boardSave, gooseLoc;
-        getline(file, turn_str);
-        getline(file, blue);
-        getline(file, red);
-        getline(file, orange);
-        getline(file, yellow);
-        getline(file, boardSave);
-        getline(file, gooseLoc);
-        b = make_unique<LoadedBoard>(boardSave);
-        addBuilder("Blue", loaded.get(), blue, builders, &(*b), startingBuildings);
-        addBuilder("Red", loaded.get(), red, builders, &(*b), startingBuildings);
-        addBuilder("Orange", loaded.get(), orange, builders, &(*b), startingBuildings);
-        addBuilder("Yellow", loaded.get(), yellow, builders, &(*b), startingBuildings);
-        for (int i = 0; i < static_cast<int>(builders.size()); ++i) {
-            if (builders[i].getColour() == turn_str) {
-                turn = i;
-                break;
-            }
-        }
-        if (stoi(gooseLoc) != -1) (goose->move(b->getTile(stoi(gooseLoc))));
-
-    }  else if (loadBoard || !randomBoard) {
-
-        // Load only Board from file
-        ifstream file{fileName};
-        string s;
-        getline(file, s);
-        b = make_unique<LoadedBoard>(s);
-        builders.emplace_back(Builder("Blue", loaded.get()));
-        builders.emplace_back(Builder("Red", loaded.get()));
-        builders.emplace_back(Builder("Orange", loaded.get()));
-        builders.emplace_back(Builder("Yellow", loaded.get()));
-        
-    } else {
-
-        // Random Board;
-        b = make_unique<RandomBoard>(seed);
-        builders.emplace_back(Builder("Blue", loaded.get()));
-        builders.emplace_back(Builder("Red", loaded.get()));
-        builders.emplace_back(Builder("Orange", loaded.get()));
-        builders.emplace_back(Builder("Yellow", loaded.get()));
-
-    }
-
-    cout << b->getDesc() << endl;
     bool gameBegun = true;
+    string continueGame = "no";
+
+    // If eof exception is thrown, the game with exit and save to a file
     try {
-        // Beginning of Game phase
         
-        if (startingBuildings < static_cast<int>(builders.size()) * 2) {
-            gameBegun = false;
-            int bSize = builders.size();
-            bool firstRound = true;
-
-            if (startingBuildings >= bSize) {
-                startingBuildings = 2 * bSize - (startingBuildings) - 1;
-                firstRound = false;
-            }
-
-            for (int i = startingBuildings; i >= 0; firstRound ? ++i : --i) {
-
-                if (i == bSize) {
-                    --i;
-                    firstRound = false;
-                } 
-
-                cout << "Builder " << builders[i].getColour() << ", where do you want to build a basement?" << endl;
-                while (!builders[i].buildRes(&b->getVertex(read_valid<int>(&validVertex, "You cannot build here.\n")), true)) {
-                    cout << "You cannot build here." << endl;
-                }
-            }
-
-            cout << b->getDesc() << endl;
-            gameBegun = true;
-        } 
-        // ~Beginning of Game phase
-        
-        // Game loop
+        // A new game will reset this loop
         while (true) {
-            Builder& curr_builder = builders[turn];
-            cout << "Builder " << curr_builder.getColour() << "'s turn." << endl;
-            
-            // Beginning of turn phase
 
-            vector<ResourceList> prevResources;
-            for (auto& builder : builders) {
-                prevResources.emplace_back(builder.getHand());
+            // Setting up the board
+            if (loadBoard && fullSave) {
+
+                ifstream file{fileName};
+                string turn_str, blue, red, orange, yellow, boardSave, gooseLoc;
+                getline(file, turn_str);
+                getline(file, blue);
+                getline(file, red);
+                getline(file, orange);
+                getline(file, yellow);
+                getline(file, boardSave);
+                getline(file, gooseLoc);
+                b = make_unique<LoadedBoard>(boardSave);
+                addBuilder("Blue", loaded.get(), blue, builders, &(*b), startingBuildings);
+                addBuilder("Red", loaded.get(), red, builders, &(*b), startingBuildings);
+                addBuilder("Orange", loaded.get(), orange, builders, &(*b), startingBuildings);
+                addBuilder("Yellow", loaded.get(), yellow, builders, &(*b), startingBuildings);
+                for (int i = 0; i < static_cast<int>(builders.size()); ++i) {
+                    if (builders[i].getColour() == turn_str) {
+                        turn = i;
+                        break;
+                    }
+                }
+                if (stoi(gooseLoc) != -1) (goose->move(b->getTile(stoi(gooseLoc))));
+        
+            }  else if (loadBoard || !randomBoard) {
+        
+                // Load only Board from file
+                ifstream file{fileName};
+                string s;
+                getline(file, s);
+                b = make_unique<LoadedBoard>(s);
+                builders.emplace_back(Builder("Blue", loaded.get()));
+                builders.emplace_back(Builder("Red", loaded.get()));
+                builders.emplace_back(Builder("Orange", loaded.get()));
+                builders.emplace_back(Builder("Yellow", loaded.get()));
+                
+            } else {
+        
+                // Random Board;
+                b = make_unique<RandomBoard>(rand);
+                builders.emplace_back(Builder("Blue", loaded.get()));
+                builders.emplace_back(Builder("Red", loaded.get()));
+                builders.emplace_back(Builder("Orange", loaded.get()));
+                builders.emplace_back(Builder("Yellow", loaded.get()));
+        
             }
+            cout << b->getDesc() << endl;
+            // ~Setting up the Board
 
+            // Beginning of Game phase
+            if (startingBuildings < static_cast<int>(builders.size()) * 2) {
+                gameBegun = false;
+                int bSize = builders.size();
+                bool firstRound = true;
+
+                if (startingBuildings >= bSize) {
+                    startingBuildings = 2 * bSize - (startingBuildings) - 1;
+                    firstRound = false;
+                }
+
+                for (int i = startingBuildings; i >= 0; firstRound ? ++i : --i) {
+
+                    if (i == bSize) {
+                        --i;
+                        firstRound = false;
+                    } 
+
+                    cout << "Builder " << builders[i].getColour() << ", where do you want to build a basement?" << endl;
+                    while (!builders[i].buildRes(&b->getVertex(read_valid<int>(&validVertex, "You cannot build here.\n")), true)) {
+                        cout << "You cannot build here." << endl;
+                    }
+                }
+
+                cout << b->getDesc() << endl;
+                gameBegun = true;
+            } 
+            // ~Beginning of Game phase
+            
+            // Game loop
             while (true) {
-                string dieAction = read_valid<string>(&validTurnBegin, "Invalid command.\nTry 'load', 'fair', or 'roll'.\n");
-                if (dieAction == "load") {
-                    curr_builder.setDie(&(*loaded));
-                    cout << "Dice loaded." << endl;
-                    continue;
-                } else if (dieAction == "fair") {
-                    curr_builder.setDie(&(*fair));
-                    cout << "Dice fair." << endl;
-                    continue;
-                } else {
-                    // roll!
-                    int theRoll = curr_builder.roll();
-                    cout << "Rolled a " << theRoll << "!" << endl;
-                    if (theRoll == 7) {
-                        // Goose!
-                        for (auto& builder : builders) {
-                            builder.halfResources();
-                        }
-                        cout << "Choose where to place the GEESE." << endl;
-                        while (true) {
-                            int moveTile = read_valid<int>(&validTile, "Please choose a valid tile for placing the GEESE.");
-                            if (moveTile == goose->getIndex()) {
-                                cout << "The GEESE are already at that tile." << endl << "Please choose a valid tile for placing the GEESE." << endl;
-                            } else {
+                Builder& curr_builder = builders[turn];
+                cout << "Builder " << curr_builder.getColour() << "'s turn." << endl;
+                
+                // Beginning of turn phase
 
-                                goose->move(b->getTile(moveTile));
-                                
-                                std::vector<Builder*> possibleVictims = b->getTile(moveTile)->getBuildersOnTile();
+                vector<ResourceList> prevResources;
+                for (auto& builder : builders) {
+                    prevResources.emplace_back(builder.getHand());
+                }
 
-                                // Check if stealing from self
-                                for (int i = 0; i < static_cast<int>(possibleVictims.size()); ++i) {
-                                    if (possibleVictims.at(i) == &curr_builder) {
-                                        possibleVictims.erase(possibleVictims.begin() + i);
-                                    }
-                                }
+                while (true) {
+                    string dieAction = read_valid<string>(&validTurnBegin, "Invalid command.\nTry 'load', 'fair', or 'roll'.\n");
+                    if (dieAction == "load") {
+                        curr_builder.setDie(&(*loaded));
+                        cout << "Dice loaded." << endl;
+                        continue;
+                    } else if (dieAction == "fair") {
+                        curr_builder.setDie(&(*fair));
+                        cout << "Dice fair." << endl;
+                        continue;
+                    } else {
+                        // roll!
+                        int theRoll = curr_builder.roll();
+                        cout << "Rolled a " << theRoll << "!" << endl;
+                        if (theRoll == 7) {
+                            // Goose!
+                            for (auto& builder : builders) {
+                                builder.halfResources();
+                            }
+                            cout << "Choose where to place the GEESE." << endl;
+                            while (true) {
+                                int moveTile = read_valid<int>(&validTile, "Please choose a valid tile for placing the GEESE.");
+                                if (moveTile == goose->getIndex()) {
+                                    cout << "The GEESE are already at that tile." << endl << "Please choose a valid tile for placing the GEESE." << endl;
+                                } else {
 
-                                // If there is someone to steal from, steal
-                                if (possibleVictims.size() > 0) {
+                                    goose->move(b->getTile(moveTile));
+                                    
+                                    std::vector<Builder*> possibleVictims = b->getTile(moveTile)->getBuildersOnTile();
 
-                                    cout << "Builder " << curr_builder.getColour() << " can choose to steal from ";
+                                    // Check if stealing from self
                                     for (int i = 0; i < static_cast<int>(possibleVictims.size()); ++i) {
-                                        cout << possibleVictims.at(i)->getColour();
-                                        if ( i != static_cast<int>(possibleVictims.size()) - 1) {
-                                            cout << ", ";
+                                        if (possibleVictims.at(i) == &curr_builder) {
+                                            possibleVictims.erase(possibleVictims.begin() + i);
                                         }
                                     }
 
-                                    cout << "." << endl << "Choose a builder to steal from." << endl;
-                                    while (true) {
-                                        string choice;
-                                        bool goodChoice = false;
-                                        if (read_one_valid<string>(&retTrue, choice)) {
-                                            for (auto& victim : possibleVictims) {
-                                                if (victim->getColour() == choice) {
-                                                    goodChoice = true;
-                                                    Resource to_gain = victim->loseRandomResource();
-                                                    if (to_gain != Resource::PARK) {
-                                                        curr_builder.getHand().change(to_gain, 1);
+                                    // If there is someone to steal from, steal
+                                    if (possibleVictims.size() > 0) {
+
+                                        cout << "Builder " << curr_builder.getColour() << " can choose to steal from ";
+                                        for (int i = 0; i < static_cast<int>(possibleVictims.size()); ++i) {
+                                            cout << possibleVictims.at(i)->getColour();
+                                            if ( i != static_cast<int>(possibleVictims.size()) - 1) {
+                                                cout << ", ";
+                                            }
+                                        }
+
+                                        cout << "." << endl << "Choose a builder to steal from." << endl;
+                                        while (true) {
+                                            string choice;
+                                            bool goodChoice = false;
+                                            if (read_one_valid<string>(&retTrue, choice)) {
+                                                for (auto& victim : possibleVictims) {
+                                                    if (victim->getColour() == choice) {
+                                                        goodChoice = true;
+                                                        Resource to_gain = victim->loseRandomResource();
+                                                        if (to_gain != Resource::PARK) {
+                                                            curr_builder.getHand().change(to_gain, 1);
+                                                        }
+                                                        cout << "Builder " << curr_builder.getColour() << " steals " << res_to_str(to_gain) << " from builder " << victim->getColour() << "." << endl;
+                                                        break; 
                                                     }
-                                                    cout << "Builder " << curr_builder.getColour() << " steals " << res_to_str(to_gain) << " from builder " << victim->getColour() << "." << endl;
-                                                    break; 
+                                                }
+                                                if (goodChoice) {
+                                                    break;
                                                 }
                                             }
-                                            if (goodChoice) {
-                                                break;
-                                            }
-                                        }
-                                        cout << "Choose a valid builder to steal from." << endl;
-                                    }
-                                } else {
-                                    cout << "Builder " << curr_builder.getColour() << " has no builders to steal from." << endl;
-                                }
-                                break;
-                            }
-                        }
-                    } else {
-                        b->rolled(theRoll);
-                        bool resGained = false;
-                        for (int i = 0; i < static_cast<int>(builders.size()); ++i) {
-                            if (builders.at(i).getHand() != prevResources.at(i)) {
-                                resGained = true;
-                                cout << "Builder " << builders[i].getColour() << " gained:" << endl;
-                                if (builders[i].getHand().get(Resource::BRICK) - prevResources[i].get(Resource::BRICK)) {
-                                    cout << builders[i].getHand().get(Resource::BRICK) - prevResources[i].get(Resource::BRICK) << " brick" << endl;
-                                }
-                                if (builders[i].getHand().get(Resource::ENERGY) - prevResources[i].get(Resource::ENERGY)) {
-                                    cout << builders[i].getHand().get(Resource::ENERGY) - prevResources[i].get(Resource::ENERGY) << " energy" << endl;
-                                }
-                                if (builders[i].getHand().get(Resource::GLASS) - prevResources[i].get(Resource::GLASS)) {
-                                    cout << builders[i].getHand().get(Resource::GLASS) - prevResources[i].get(Resource::GLASS) << " glass" << endl;
-                                }
-                                if (builders[i].getHand().get(Resource::HEAT) - prevResources[i].get(Resource::HEAT)) {
-                                    cout << builders[i].getHand().get(Resource::HEAT) - prevResources[i].get(Resource::HEAT) << " heat" << endl;
-                                }
-                                if (builders[i].getHand().get(Resource::WIFI) - prevResources[i].get(Resource::WIFI)) {
-                                    cout << builders[i].getHand().get(Resource::WIFI) - prevResources[i].get(Resource::WIFI) << " WiFi" << endl;
-                                }
-                            }
-                        }
-                        if (!resGained) {
-                            cout << "No builders gained resources." << endl;
-                        }
-                    }
-
-                    break;
-                }
-                cout << "Invalid command?\nTry 'load', 'fair', or 'roll'.\n";
-                
-            }
-            // ~Beginning of turn phase
-
-            // During the turn phase
-            while (true) {
-
-                string builderAction = read_valid<string>(&validTurnCmd, "Invalid command.\nTry 'help' for a list of valid commands.\n");
-
-                if (builderAction == "board") {
-                    cout << b->getDesc() << endl;
-                    continue;
-                } else if (builderAction == "status") {
-                    cout << curr_builder.getStatusDesc() << endl;
-                    continue;
-                } else if (builderAction == "residences") {
-                    cout << curr_builder.getResidencesDesc();
-                    continue;
-                } else if (builderAction == "build-road") {
-                    int edgeNum ;
-                    if (read_one_valid<int>(&validEdge, edgeNum)) {
-                        if (curr_builder.buildRoad(&b->getEdge(edgeNum), false)) {
-                            break;
-                        } else if (!(curr_builder.getHand() >= Road::getCost())) {
-                            cout << "You do not have enough resources." << endl;
-                        } else {
-                            cout << "You cannot build here." << endl;
-                        }
-                    } else {
-                        cout << "Invalid command." << endl;
-                    }
-                    continue;
-                } else if (builderAction == "build-res") {
-                    int vertNum;
-                    if (read_one_valid<int>(&validVertex, vertNum)) {
-                        if (curr_builder.buildRes(&b->getVertex(vertNum), false)) {
-                            break;
-                        } else if (!(curr_builder.getHand() >= Basement::getCost())) {
-                            cout << "You do not have enough resources." << endl;
-                        } else {
-                            cout << "You cannot build here." << endl;
-                        }
-                    } else {
-                        cout << "Invalid command." << endl;
-                    }
-                    continue;
-                } else if (builderAction == "improve") {
-                    int vertNum;
-                    if (read_one_valid<int>(&validVertex, vertNum)) {
-                        try {
-                            b->getVertex(vertNum).getBuilding()->getImproveResources();
-                        } catch (...) {
-                            cout << "Cannot improve a Tower." << endl;
-                            continue;
-                        }
-                        if (curr_builder.improve(&b->getVertex(vertNum), false)) {
-                            break;
-                        } else if (!b->getVertex(vertNum).getBuilding()) {
-                            cout << "You cannot build here." << endl;
-                        } else if (!(curr_builder.getHand() >= b->getVertex(vertNum).getBuilding()->getImproveResources())) {
-                            // NOTE: GETIMPROVERESOURCES THROWS AN ERROR IF IMPROVING TO
-                            cout << "You do not have enough resources." << endl;
-                        } else {
-                            cout << "You cannot build here." << endl;
-                        }
-                    } else {
-                        cout << "Invalid command." << endl;
-                    }
-                    continue;
-                } else if (builderAction == "trade") {
-                    string col;
-                    if (read_one_valid<string>(&retTrue, col) && curr_builder.getColour() != col) {
-                        for (auto& builder : builders) {
-                            if (builder.getColour() == col) {
-                                string give;
-                                string take;
-                                if (read_one_valid<string>(&isValidResource, give) && read_one_valid<string>(&isValidResource, take)) {
-                                    cout << curr_builder.getColour() << " offers " << builder.getColour() << " one " <<
-                                        give << " for one " << take << "." << endl << "Does " << builder.getColour() <<
-                                        " accept this offer?" << endl;
-                                    string ans = read_valid<string>(&yes_no, "Please answer 'yes' or 'no'");
-                                    if (ans == "yes") {
-                                        Resource giveRes;
-                                        Resource takeRes;
-                                        if (give == "brick") giveRes = Resource::BRICK;
-                                        else if (give == "energy") giveRes = Resource::ENERGY;
-                                        else if (give == "glass") giveRes = Resource::GLASS;
-                                        else if (give == "heat") giveRes = Resource::HEAT;
-                                        else if (give == "wifi") giveRes = Resource::WIFI;
-                                        else giveRes = Resource::PARK;
-                                        if (take == "brick") takeRes = Resource::BRICK;
-                                        else if (take == "energy") takeRes = Resource::ENERGY;
-                                        else if (take == "glass") takeRes = Resource::GLASS;
-                                        else if (take == "heat") takeRes = Resource::HEAT;
-                                        else if (take == "wifi") takeRes = Resource::WIFI;
-                                        else takeRes = Resource::PARK;
-                                        if (!curr_builder.trade(giveRes, takeRes, &builder)) {
-                                            cout << "You do not have enough resources." << endl;
+                                            cout << "Choose a valid builder to steal from." << endl;
                                         }
                                     } else {
-                                        cout << "Trade not accepted." << endl;
+                                        cout << "Builder " << curr_builder.getColour() << " has no builders to steal from." << endl;
                                     }
-                                } else {
-                                    cout << "Invalid command." << endl;
+                                    break;
                                 }
-                                break;
+                            }
+                        } else {
+                            b->rolled(theRoll);
+                            bool resGained = false;
+                            for (int i = 0; i < static_cast<int>(builders.size()); ++i) {
+                                if (builders.at(i).getHand() != prevResources.at(i)) {
+                                    resGained = true;
+                                    cout << "Builder " << builders[i].getColour() << " gained:" << endl;
+                                    if (builders[i].getHand().get(Resource::BRICK) - prevResources[i].get(Resource::BRICK)) {
+                                        cout << builders[i].getHand().get(Resource::BRICK) - prevResources[i].get(Resource::BRICK) << " brick" << endl;
+                                    }
+                                    if (builders[i].getHand().get(Resource::ENERGY) - prevResources[i].get(Resource::ENERGY)) {
+                                        cout << builders[i].getHand().get(Resource::ENERGY) - prevResources[i].get(Resource::ENERGY) << " energy" << endl;
+                                    }
+                                    if (builders[i].getHand().get(Resource::GLASS) - prevResources[i].get(Resource::GLASS)) {
+                                        cout << builders[i].getHand().get(Resource::GLASS) - prevResources[i].get(Resource::GLASS) << " glass" << endl;
+                                    }
+                                    if (builders[i].getHand().get(Resource::HEAT) - prevResources[i].get(Resource::HEAT)) {
+                                        cout << builders[i].getHand().get(Resource::HEAT) - prevResources[i].get(Resource::HEAT) << " heat" << endl;
+                                    }
+                                    if (builders[i].getHand().get(Resource::WIFI) - prevResources[i].get(Resource::WIFI)) {
+                                        cout << builders[i].getHand().get(Resource::WIFI) - prevResources[i].get(Resource::WIFI) << " WiFi" << endl;
+                                    }
+                                }
+                            }
+                            if (!resGained) {
+                                cout << "No builders gained resources." << endl;
                             }
                         }
-                    } else {
-                        cout << "Invalid command.";
+
+                        break;
                     }
-                    continue;
-                } else if (builderAction == "next") {
+                    cout << "Invalid command?\nTry 'load', 'fair', or 'roll'.\n";
+                    
+                }
+                // ~Beginning of turn phase
+
+                // During the turn phase
+                while (true) {
+
+                    string builderAction = read_valid<string>(&validTurnCmd, "Invalid command.\nTry 'help' for a list of valid commands.\n");
+
+                    if (builderAction == "board") {
+                        cout << b->getDesc() << endl;
+                        continue;
+                    } else if (builderAction == "status") {
+                        cout << curr_builder.getStatusDesc() << endl;
+                        continue;
+                    } else if (builderAction == "residences") {
+                        cout << curr_builder.getResidencesDesc();
+                        continue;
+                    } else if (builderAction == "build-road") {
+                        int edgeNum ;
+                        if (read_one_valid<int>(&validEdge, edgeNum)) {
+                            if (curr_builder.buildRoad(&b->getEdge(edgeNum), false)) {
+                                break;
+                            } else if (!(curr_builder.getHand() >= Road::getCost())) {
+                                cout << "You do not have enough resources." << endl;
+                            } else {
+                                cout << "You cannot build here." << endl;
+                            }
+                        } else {
+                            cout << "Invalid command." << endl;
+                        }
+                        continue;
+                    } else if (builderAction == "build-res") {
+                        int vertNum;
+                        if (read_one_valid<int>(&validVertex, vertNum)) {
+                            if (curr_builder.buildRes(&b->getVertex(vertNum), false)) {
+                                break;
+                            } else if (!(curr_builder.getHand() >= Basement::getCost())) {
+                                cout << "You do not have enough resources." << endl;
+                            } else {
+                                cout << "You cannot build here." << endl;
+                            }
+                        } else {
+                            cout << "Invalid command." << endl;
+                        }
+                        continue;
+                    } else if (builderAction == "improve") {
+                        int vertNum;
+                        if (read_one_valid<int>(&validVertex, vertNum)) {
+                            try {
+                                b->getVertex(vertNum).getBuilding()->getImproveResources();
+                            } catch (...) {
+                                cout << "Cannot improve a Tower." << endl;
+                                continue;
+                            }
+                            if (curr_builder.improve(&b->getVertex(vertNum), false)) {
+                                break;
+                            } else if (!b->getVertex(vertNum).getBuilding()) {
+                                cout << "You cannot build here." << endl;
+                            } else if (!(curr_builder.getHand() >= b->getVertex(vertNum).getBuilding()->getImproveResources())) {
+                                // NOTE: GETIMPROVERESOURCES THROWS AN ERROR IF IMPROVING TO
+                                cout << "You do not have enough resources." << endl;
+                            } else {
+                                cout << "You cannot build here." << endl;
+                            }
+                        } else {
+                            cout << "Invalid command." << endl;
+                        }
+                        continue;
+                    } else if (builderAction == "trade") {
+                        string col;
+                        if (read_one_valid<string>(&retTrue, col) && curr_builder.getColour() != col) {
+                            for (auto& builder : builders) {
+                                if (builder.getColour() == col) {
+                                    string give;
+                                    string take;
+                                    if (read_one_valid<string>(&isValidResource, give) && read_one_valid<string>(&isValidResource, take)) {
+                                        cout << curr_builder.getColour() << " offers " << builder.getColour() << " one " <<
+                                            give << " for one " << take << "." << endl << "Does " << builder.getColour() <<
+                                            " accept this offer?" << endl;
+                                        string ans = read_valid<string>(&yes_no, "Please answer 'yes' or 'no'");
+                                        if (ans == "yes") {
+                                            Resource giveRes;
+                                            Resource takeRes;
+                                            if (give == "brick") giveRes = Resource::BRICK;
+                                            else if (give == "energy") giveRes = Resource::ENERGY;
+                                            else if (give == "glass") giveRes = Resource::GLASS;
+                                            else if (give == "heat") giveRes = Resource::HEAT;
+                                            else if (give == "wifi") giveRes = Resource::WIFI;
+                                            else giveRes = Resource::PARK;
+                                            if (take == "brick") takeRes = Resource::BRICK;
+                                            else if (take == "energy") takeRes = Resource::ENERGY;
+                                            else if (take == "glass") takeRes = Resource::GLASS;
+                                            else if (take == "heat") takeRes = Resource::HEAT;
+                                            else if (take == "wifi") takeRes = Resource::WIFI;
+                                            else takeRes = Resource::PARK;
+                                            if (!curr_builder.trade(giveRes, takeRes, &builder)) {
+                                                cout << "You do not have enough resources." << endl;
+                                            }
+                                        } else {
+                                            cout << "Trade not accepted." << endl;
+                                        }
+                                    } else {
+                                        cout << "Invalid command." << endl;
+                                    }
+                                    break;
+                                }
+                            }
+                        } else {
+                            cout << "Invalid command.";
+                        }
+                        continue;
+                    } else if (builderAction == "next") {
+                        break;
+                    } else if (builderAction == "save") {
+                        string fname;
+                        if (cin >> fname) {
+                            ofstream file{fname};
+                            if (gameBegun) {
+                                turn = (turn + 1) % builders.size();
+                            }
+                            file << builders[turn].getColour() << endl;
+            
+                            for (auto& builder : builders) {
+
+                            file << builder.saveOutput() << endl;
+
+                            }
+
+                            file << b->saveOutput() << endl;
+                            file << goose->getIndex() << endl;
+                        } else {
+                            cout << "Invalid command." << endl;
+                        }
+                        continue;
+                    } else if (builderAction == "help") {
+                        cout << "Valid commands:" << endl << "board" << endl << "status" << endl <<
+                        "residences" << endl << "build-road <edge#>" << endl << "build-res <housing#>" << 
+                        endl << "improve <housing#>" << endl << "trade <colour> <give> <take>" << 
+                        endl << "next" << endl << "save <file>" << endl << "help" << endl;
+                        continue;
+                    }
+
+                    cout << "Invalid command.\nTry 'help' for a list of valid commands.\n";
+                }
+                // ~During the turn phase
+
+                // Chcecking for winner
+                bool isWinner = false;
+                string winnerColour;
+                for (auto &builder : builders) {
+
+                    if (builder.getVictoryPoints() >= 10) {
+
+                        isWinner = true;
+                        winnerColour = builder.getColour();
+
+                    }
+
+                }
+
+                if (isWinner) {
+
+                    cout << "Builder " << winnerColour << " has gotten 10 victory points, they win! Congratulations!" << endl;
+                    cout << "Would you like to play again?" << endl;
+                    continueGame = read_valid<string>(&yes_no, "Invalid command?\nTry 'yes', or 'no'.\n");
                     break;
-                } else if (builderAction == "save") {
-                    string fname;
-                    if (cin >> fname) {
-                        ofstream file{fname};
-                        if (gameBegun) {
-                            turn = (turn + 1) % builders.size();
-                        }
-                        file << builders[turn].getColour() << endl;
-        
-                        for (auto& builder : builders) {
-
-                        file << builder.saveOutput() << endl;
-
-                        }
-
-                        file << b->saveOutput() << endl;
-                        file << goose->getIndex() << endl;
-                    } else {
-                        cout << "Invalid command." << endl;
-                    }
-                    continue;
-                } else if (builderAction == "help") {
-                    cout << "Valid commands:" << endl << "board" << endl << "status" << endl <<
-                    "residences" << endl << "build-road <edge#>" << endl << "build-res <housing#>" << 
-                    endl << "improve <housing#>" << endl << "trade <colour> <give> <take>" << 
-                    endl << "next" << endl << "save <file>" << endl << "help" << endl;
-                    continue;
-                }
-
-                cout << "Invalid command.\nTry 'help' for a list of valid commands.\n";
-            }
-            // ~During the turn phase
-
-            // Chcecking for winner
-            bool isWinner = false;
-            string winnerColour;
-            for (auto &builder : builders) {
-
-                if (builder.getVictoryPoints() >= 10) {
-
-                    isWinner = true;
-                    winnerColour = builder.getColour();
 
                 }
-
+                
+                // Next turn
+                turn = (turn + 1) % builders.size();
             }
+            // ~Game loop
 
-            if (isWinner) {
+            if (continueGame == "no") {
 
-                cout << "Builder " << winnerColour << " has gotten 10 victory points, they win! Congratulations!" << endl;
-                cout << "Would you like to play again?" << endl;
                 break;
 
+            } else {
+
+                goose->move(nullptr);
+                loadBoard = false;
+                fullSave = false;
+                randomBoard = true;
+                builders.clear();
+                builders.reserve(4);
+                turn = 0;
+                startingBuildings = 0;
+
             }
-            
-            // Next turn
-            turn = (turn + 1) % builders.size();
+
         }
-        // ~Game loop
 
     } catch (...) {
         // save then terminate program due to EOF.

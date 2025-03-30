@@ -5,11 +5,8 @@
 
 using namespace std;
 
-RandomBoard::RandomBoard(unsigned seed) : Board{} {
-
-    //Seeding random engine
-    default_random_engine rand{seed};
-
+RandomBoard::RandomBoard(default_random_engine rand) : Board{} {
+    
     //Creating tiles
     vector<int> resources = 
     {0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4};

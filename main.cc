@@ -306,7 +306,7 @@ int main (int argc, char* argv[]) {
                             }
                             cout << "Choose where to place the GEESE." << endl;
                             while (true) {
-                                int moveTile = read_valid<int>(&validTile, "Please choose a valid tile for placing the GEESE.");
+                                int moveTile = read_valid<int>(&validTile, "Please choose a valid tile for placing the GEESE.\n");
                                 if (moveTile == goose->getIndex()) {
                                     cout << "The GEESE are already at that tile." << endl << "Please choose a valid tile for placing the GEESE." << endl;
                                 } else {
@@ -475,7 +475,7 @@ int main (int argc, char* argv[]) {
                                         cout << curr_builder.getColour() << " offers " << builder.getColour() << " one " <<
                                             give << " for one " << take << "." << endl << "Does " << builder.getColour() <<
                                             " accept this offer?" << endl;
-                                        string ans = read_valid<string>(&yes_no, "Please answer 'yes' or 'no'");
+                                        string ans = read_valid<string>(&yes_no, "Please answer 'yes' or 'no'\n");
                                         if (ans == "yes") {
                                             Resource giveRes;
                                             Resource takeRes;

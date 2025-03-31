@@ -415,7 +415,7 @@ int main (int argc, char* argv[]) {
                         int edgeNum ;
                         if (read_one_valid<int>(&validEdge, edgeNum)) {
                             if (curr_builder.buildRoad(&b->getEdge(edgeNum), false)) {
-                                break;
+                                continue;
                             } else if (!(curr_builder.getHand() >= Road::getCost())) {
                                 cout << "You do not have enough resources." << endl;
                             } else {
@@ -429,7 +429,7 @@ int main (int argc, char* argv[]) {
                         int vertNum;
                         if (read_one_valid<int>(&validVertex, vertNum)) {
                             if (curr_builder.buildRes(&b->getVertex(vertNum), false)) {
-                                break;
+                                continue;
                             } else if (!(curr_builder.getHand() >= Basement::getCost())) {
                                 cout << "You do not have enough resources." << endl;
                             } else {
@@ -449,7 +449,7 @@ int main (int argc, char* argv[]) {
                                 continue;
                             }
                             if (curr_builder.improve(&b->getVertex(vertNum), false)) {
-                                break;
+                                continue;
                             } else if (!b->getVertex(vertNum).getBuilding()) {
                                 cout << "You cannot build here." << endl;
                             } else if (!(curr_builder.getHand() >= b->getVertex(vertNum).getBuilding()->getImproveResources())) {

@@ -302,7 +302,7 @@ int main (int argc, char* argv[]) {
                         if (theRoll == 7) {
                             // Goose!
                             for (auto& builder : builders) {
-                                builder.halfResources();
+                                cout << builder.halfResources();
                             }
                             cout << "Choose where to place the GEESE." << endl;
                             while (true) {

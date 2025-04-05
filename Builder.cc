@@ -170,7 +170,8 @@ string Builder::halfResources() {
         std::mt19937 gen(rd()); // mersenne_twister_engine seeded with rd()
         std::uniform_int_distribution<> distrib(0, 4);
         // above from cppreference for uniform_int_distribution example
-        for (int i = 0; i < hand.getTotal() / 2; ++i) {
+        int total = hand.getTotal();
+	for (int i = 0; i < total / 2; ++i) {
             switch (distrib(gen)) {
                 case 0 :
                     hand.change(Resource::BRICK, -1);

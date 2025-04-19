@@ -1,1 +1,23 @@
-# Constructor
+# Final project for CS246 (Object-Oriented Software Development) in the Winter 2025 term
+# By Len Dizdar and Rylan Hachey
+# 
+# This game generally follows the rules of Klaus Teuber's Settlers of Catan,
+# while changing a few things for flavour and omitting the following:
+#   Development cards, longest road, bank/port trading
+#
+# Building Resources:
+#   A basement costs one BRICK, one ENERGY, one GLASS, and one WIFI to build.
+#   A house costs two GLASS, and three HEAT to build.
+#   A tower costs three BRICK, two ENERGY, two GLASS, one WIFI, and two HEAT to build.
+#   A road costs one HEAT and one WIFI to build.
+#
+# Victory points:
+#   Basement: 1
+#   House: 2
+#   Tower: 3
+#   (These are the only methods of obtaining victory points)
+#
+# Other than that, the rules are as close as possible to Settlers of Catan.
+#
+# The console output will suggest what commands to use.
+# Note that prompts like <vertex>, <tile, or <edge> require a number (as displayed on the board).
